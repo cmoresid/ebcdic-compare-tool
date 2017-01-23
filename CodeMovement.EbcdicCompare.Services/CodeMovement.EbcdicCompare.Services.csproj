@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>0b9f2b10-106f-418b-bfa8-d05b0d16d307</ProjectGuid>
+    <ProjectGuid>{0B9F2B10-106F-418B-BFA8-D05B0D16D307}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CodeMovement.EbcdicCompare.Services</RootNamespace>
@@ -30,24 +30,50 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System"/>
-    
-    <Reference Include="System.Core"/>
-    <Reference Include="System.Xml.Linq"/>
-    <Reference Include="System.Data.DataSetExtensions"/>
-    
-    
-    <Reference Include="Microsoft.CSharp"/>
-    
-    <Reference Include="System.Data"/>
-    
-    <Reference Include="System.Net.Http"/>
-    
-    <Reference Include="System.Xml"/>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.1\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="CompareEbcdicFilesService.cs" />
+    <Compile Include="CopybookManager.cs" />
+    <Compile Include="EbcdicDecoder.cs" />
+    <Compile Include="EbcdicFileReader.cs" />
+    <Compile Include="EbcdicReader.cs" />
+    <Compile Include="EbcdicReaderService.cs" />
+    <Compile Include="Extension\StreamExtension.cs" />
+    <Compile Include="ExternalProgramService.cs" />
+    <Compile Include="FileOperationsManager.cs" />
+    <Compile Include="ICompareEbcdicFilesService.cs" />
+    <Compile Include="ICopybookManager.cs" />
+    <Compile Include="IEbcdicReaderService.cs" />
+    <Compile Include="IExternalProgramService.cs" />
+    <Compile Include="IFileOperationsManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CodeMovement.EbcdicCompare.DataAccess\CodeMovement.EbcdicCompare.DataAccess.csproj">
+      <Project>{c216b41f-74ff-498a-b26e-61d8452a409b}</Project>
+      <Name>CodeMovement.EbcdicCompare.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CodeMovement.EbcdicCompare.Models\CodeMovement.EbcdicCompare.Models.csproj">
+      <Project>{cd173ec7-0ffe-4dc0-b46d-0949815199a1}</Project>
+      <Name>CodeMovement.EbcdicCompare.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -57,5 +83,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-
- </Project>
+</Project>
