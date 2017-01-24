@@ -3,6 +3,8 @@
 
 # Sonarqube
 .sonarqube
+results.xml
+opencover.xml
 
 # User-specific files
 *.suo
