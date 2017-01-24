@@ -33,6 +33,7 @@
 */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace CodeMovement.EbcdicCompare.Models.IO
@@ -40,6 +41,7 @@ namespace CodeMovement.EbcdicCompare.Models.IO
     /// <summary>
     /// Base implementations for all concrete <see cref="T:Summer.Batch.IO.IResource"/> implementations.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public abstract class AbstractResource : IResource
     {
         /// <summary>

@@ -15,6 +15,7 @@
 
 using System.Collections.Generic;
 using CodeMovement.EbcdicCompare.Models.Copybook;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CodeMovement.EbcdicCompare.Models.Mapper
 {

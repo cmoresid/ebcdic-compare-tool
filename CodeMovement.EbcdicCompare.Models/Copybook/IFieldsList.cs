@@ -14,6 +14,7 @@
 //   limitations under the License.
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CodeMovement.EbcdicCompare.Models.Copybook
 {

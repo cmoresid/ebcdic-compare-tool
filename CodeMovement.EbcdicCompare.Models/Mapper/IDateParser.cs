@@ -14,6 +14,7 @@
 //   limitations under the License.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CodeMovement.EbcdicCompare.Models.Mapper
 {

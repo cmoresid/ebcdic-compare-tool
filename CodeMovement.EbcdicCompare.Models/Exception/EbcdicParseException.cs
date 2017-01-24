@@ -14,6 +14,7 @@
 //   limitations under the License.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CodeMovement.EbcdicCompare.Models.Exception
 {
@@ -22,6 +23,7 @@ namespace CodeMovement.EbcdicCompare.Models.Exception
     /// EBCDIC file.
     /// </summary>
     [Serializable]
+    [ExcludeFromCodeCoverage]
     public class EbcdicParseException : System.Exception
     {
         /// <summary>

@@ -16,12 +16,14 @@
 using System;
 using System.Globalization;
 using NLog;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CodeMovement.EbcdicCompare.Models.Mapper
 {
     /// <summary>
     /// The default date parser
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class DateParser : IDateParser
     {
 

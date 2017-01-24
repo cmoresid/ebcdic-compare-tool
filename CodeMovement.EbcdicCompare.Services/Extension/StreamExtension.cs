@@ -13,6 +13,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace CodeMovement.EbcdicCompare.Services.Extension
@@ -20,6 +21,7 @@ namespace CodeMovement.EbcdicCompare.Services.Extension
     /// <summary>
     /// Extension class for <see cref="System.IO.Stream"/>.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class StreamExtension
     {
         /// <summary>

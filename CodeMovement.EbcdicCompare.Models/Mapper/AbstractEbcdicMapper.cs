@@ -14,6 +14,7 @@
 //   limitations under the License.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace CodeMovement.EbcdicCompare.Models.Mapper
@@ -22,6 +23,7 @@ namespace CodeMovement.EbcdicCompare.Models.Mapper
     /// Abstract super type for all mappers. It only contains the implementation of
     /// ToCamelCase, which is required by both reader and writer mappers.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class AbstractEbcdicMapper
     {
         /// <summary>

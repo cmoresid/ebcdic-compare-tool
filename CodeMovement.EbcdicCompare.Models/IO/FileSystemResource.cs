@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace CodeMovement.EbcdicCompare.Models.IO
@@ -6,6 +7,7 @@ namespace CodeMovement.EbcdicCompare.Models.IO
     /// <summary>
     /// Implementation of <see cref="T:IResource"/> for a file in the file system.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class FileSystemResource : AbstractResource
     {
         /// <summary>

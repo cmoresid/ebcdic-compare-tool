@@ -14,6 +14,7 @@
 //   limitations under the License.
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace CodeMovement.EbcdicCompare.Models.Copybook
@@ -21,6 +22,7 @@ namespace CodeMovement.EbcdicCompare.Models.Copybook
     /// <summary>
     /// Xml reui of FieldsGroup.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class FieldsGroup : CopybookElement, IFieldsList
     {
         /// <summary>

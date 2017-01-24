@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace CodeMovement.EbcdicCompare.Models.Copybook
@@ -6,6 +7,7 @@ namespace CodeMovement.EbcdicCompare.Models.Copybook
     /// <summary>
     /// Xml reui of FieldFormat
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class FieldFormat : CopybookElement
     {
 

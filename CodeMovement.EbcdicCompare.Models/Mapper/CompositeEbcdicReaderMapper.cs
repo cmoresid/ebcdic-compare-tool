@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CodeMovement.EbcdicCompare.Models.Copybook;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CodeMovement.EbcdicCompare.Models.Mapper
 {
@@ -8,6 +9,7 @@ namespace CodeMovement.EbcdicCompare.Models.Mapper
     /// provided with the correct mappers, and will delegate to them according to the
     /// discriminator value.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class CompositeEbcdicReaderMapper<T> : IEbcdicReaderMapper<T>
     {
         #region Attributes

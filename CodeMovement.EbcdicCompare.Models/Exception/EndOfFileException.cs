@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CodeMovement.EbcdicCompare.Models.Exception
 {
@@ -6,6 +7,7 @@ namespace CodeMovement.EbcdicCompare.Models.Exception
     /// Exception thrown by EbcdicReader to signal that the end of file has been prematurely encountered.
     /// </summary>
     [Serializable]
+    [ExcludeFromCodeCoverage]
     public class EndOfFileException : EbcdicException
     {
         /// <summary>

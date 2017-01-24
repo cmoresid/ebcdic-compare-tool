@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CodeMovement.EbcdicCompare.Models.Copybook;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CodeMovement.EbcdicCompare.Models.Mapper
 {
@@ -11,6 +12,7 @@ namespace CodeMovement.EbcdicCompare.Models.Mapper
     /// holds information and code required by most mappers, like date parser.
     /// </summary>
     /// <typeparam name="T">&nbsp;the mapped class</typeparam>
+    [ExcludeFromCodeCoverage]
     public abstract class AbstractEbcdicReaderMapper<T> : AbstractEbcdicMapper, IEbcdicReaderMapper<T>
     {
 

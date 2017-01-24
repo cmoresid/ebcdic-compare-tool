@@ -14,6 +14,7 @@
 //   limitations under the License.
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
@@ -23,6 +24,7 @@ namespace CodeMovement.EbcdicCompare.Models.Copybook
     /// <summary>
     /// Map of record format.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class RecordFormatMap
     {
         private const string Pattern = "^(?:{0})$";

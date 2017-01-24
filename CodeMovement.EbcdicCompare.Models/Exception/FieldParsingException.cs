@@ -16,6 +16,7 @@
 using System;
 using System.Runtime.Serialization;
 using CodeMovement.EbcdicCompare.Models.Copybook;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CodeMovement.EbcdicCompare.Models.Exception
 {
@@ -23,6 +24,7 @@ namespace CodeMovement.EbcdicCompare.Models.Exception
     /// Exception is thrown by EbcdicDecoder to signal an error while trying to parse an Ebcdic field.
     /// </summary>
     [Serializable]
+    [ExcludeFromCodeCoverage]
     public class FieldParsingException : EbcdicException
     {
 

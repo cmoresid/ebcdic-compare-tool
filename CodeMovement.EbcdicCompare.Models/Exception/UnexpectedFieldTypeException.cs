@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace CodeMovement.EbcdicCompare.Models.Exception
@@ -7,6 +8,7 @@ namespace CodeMovement.EbcdicCompare.Models.Exception
     ///  Exception thrown by EbcdicReader and EbcdicWriter when the format of a field is missing or unknown.
     /// </summary>
     [Serializable]
+    [ExcludeFromCodeCoverage]
     public class UnexpectedFieldTypeException : EbcdicException
     {
         private readonly char _fieldType;

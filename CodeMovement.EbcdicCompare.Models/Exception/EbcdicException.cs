@@ -14,6 +14,7 @@
 //   limitations under the License.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace CodeMovement.EbcdicCompare.Models.Exception
@@ -22,6 +23,7 @@ namespace CodeMovement.EbcdicCompare.Models.Exception
     /// Parent of all exceptions that relate to reading / writing EBCDIC files
     /// </summary>
     [Serializable]
+    [ExcludeFromCodeCoverage]
     public abstract class EbcdicException : System.Exception
     {
         /// <summary>
