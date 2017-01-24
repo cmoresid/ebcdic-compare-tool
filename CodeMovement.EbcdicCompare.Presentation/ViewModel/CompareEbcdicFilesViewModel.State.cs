@@ -128,15 +128,6 @@
                     FinishedCompare = false;
                     break;
                 case States.SelectLegacyFile:
-                    UseCopybook = null;
-                    ShowFilesDoNotMatchLabel = false;
-                    ShowFilesMatchLabel = false;
-                    ShowCompareUsingCopybookRow = false;
-                    ShowOpenFilesInExternalEditorRow = false;
-                    ShowSelectCopybookRow = false;
-                    ShowCopybookCompareButtonRow = false;
-                    ShowCopybookCompareIndicator = false;
-                    break;
                 case States.SelectModernizedFile:
                     UseCopybook = null;
                     ShowFilesDoNotMatchLabel = false;

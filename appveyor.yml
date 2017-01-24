@@ -1,0 +1,7 @@
+before_build:
+  - nuget restore
+build_script:
+  - choco install "msbuild-sonarqube-runner" -y
+  - MSBuild.SonarQube.Runner.exe begin /k:"ebcdic-compare-tool" /d:"sonar.host.url=https://sonarqube.com" /d:"sonar.login=53b27a2d5e649f3709c2ac12936770c0804739fb"
+  - msbuild "CodeMovement.EbcdicCompare.sln"
+  - MSBuild.SonarQube.Runner.exe end /d:"sonar.login=53b27a2d5e649f3709c2ac12936770c0804739fb"

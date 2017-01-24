@@ -172,7 +172,7 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 
         private async Task OnPerformInitialCompare()
         {
-            CurrentState = States.PerformingInitialCompare; ;
+            CurrentState = States.PerformingInitialCompare;
 
             var task = Task.Run(() => _compareEbcdicFilesService.CompareEbcdicByteContents(LegacyEbcdicFilePath,
                 ModernizedEbcdicFilePath));

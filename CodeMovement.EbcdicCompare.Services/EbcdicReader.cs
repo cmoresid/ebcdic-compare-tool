@@ -147,19 +147,6 @@ namespace CodeMovement.EbcdicCompare.Services
                 }
             }
 
-            // TODO: Implement handling of OCCURS > 1
-
-            //if (fieldFormat.HasDependencies() || occurs > 1)
-            //{
-            //    // if occurs is variable or greater than one, return results in a list
-            //    return values;
-            //}
-            //else
-            //{
-            //    // otherwise, just return the single item
-            //    return values[0];
-            //}
-
             return values[0];
         }
 

@@ -97,7 +97,7 @@ namespace CodeMovement.EbcdicCompare.DataAccess
 
                 using (var cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = SelectCopybookForEbcdicFile;
+                    cmd.CommandText = sqlStatement;
                     cmd.Parameters.AddRange(parameters);
 
                     return cmd.ExecuteScalar();

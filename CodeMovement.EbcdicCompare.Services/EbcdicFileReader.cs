@@ -16,7 +16,6 @@ namespace CodeMovement.EbcdicCompare.Services
     /// <typeparam name="T">&nbsp;the type of the business objects to read</typeparam>
     public class EbcdicFileReader
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly string _ebcdicFilePath;
         private readonly string _copybookFilePath;
 

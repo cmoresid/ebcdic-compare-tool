@@ -16,7 +16,7 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
             set
             {
                 _visibleEbcdicFileRecords = value;
-                OnPropertyChanged("VisibleEbcdicFileRecords");
+                OnPropertyChanged();
             }
         }
     }

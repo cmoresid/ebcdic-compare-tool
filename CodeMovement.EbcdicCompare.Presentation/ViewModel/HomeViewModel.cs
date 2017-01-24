@@ -63,6 +63,7 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
+            // Does not need to handle OnNavigatedFrom delegate method.
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
