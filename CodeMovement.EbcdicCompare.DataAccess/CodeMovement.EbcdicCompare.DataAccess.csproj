@@ -48,7 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CopybookRepository.cs" />
+    <Compile Include="FileOperation.cs" />
     <Compile Include="ICopybookRepository.cs" />
+    <Compile Include="IFileOperation.cs" />
     <Compile Include="Model\CopybookEbcdicFilePair.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

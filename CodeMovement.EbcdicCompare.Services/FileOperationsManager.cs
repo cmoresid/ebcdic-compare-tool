@@ -1,18 +1,29 @@
 ﻿using System;
 using System.IO;
 using CodeMovement.EbcdicCompare.Models.Result;
+using CodeMovement.EbcdicCompare.DataAccess;
 
 namespace CodeMovement.EbcdicCompare.Services
 {
     public class FileOperationsManager : IFileOperationsManager
     {
+        private readonly IFileOperation _fileOperation;
+
+        public FileOperationsManager(IFileOperation fileOperation)
+        {
+            _fileOperation = fileOperation;
+        }
+
         public OperationResult<string> ReadFileAsString(string filePath)
         {
             var result = new OperationResult<string>();
 
+            if (string.IsNullOrWhiteSpace(filePath))
+                return OperationResult<string>.CreateResult(null, "Must specify file path.");
+
             try
             {
-                result.Result = string.Join("\n", File.ReadAllLines(filePath));
+                result.Result = string.Join("\n", _fileOperation.ReadAllLines(filePath));
             }
             catch (Exception ex)
             {
@@ -31,7 +42,7 @@ namespace CodeMovement.EbcdicCompare.Services
 
             try
             {
-                result.Result = File.ReadAllBytes(filePath);
+                result.Result = _fileOperation.ReadAllBytes(filePath);
             }
             catch (Exception ex)
             {
@@ -45,15 +56,18 @@ namespace CodeMovement.EbcdicCompare.Services
         {
             var result = new OperationResult<string>();
 
+            if (string.IsNullOrWhiteSpace(fromPath))
+                return OperationResult<string>.CreateResult(null, "fromPath must be specified.");
+
+            if (string.IsNullOrWhiteSpace(toPath))
+                return OperationResult<string>.CreateResult(null, "toPath must be specified.");
+
             try
             {
                 var fileName = Path.GetFileName(fromPath);
                 var newToPath = Path.Combine(toPath, fileName);
 
-                // Do not attempt to overwrite the file with
-                // itself.
-                if (fromPath != newToPath)
-                    File.Copy(fromPath, newToPath, true);
+                _fileOperation.Copy(fromPath, newToPath, true);
 
                 result.Result = newToPath;
             }
@@ -70,9 +84,12 @@ namespace CodeMovement.EbcdicCompare.Services
         {
             var result = OperationResult<bool>.CreateResult(true);
 
+            if (string.IsNullOrWhiteSpace(filePath))
+                return OperationResult<bool>.CreateResult(false, "filePath must be specified.");
+
             try
             {
-                File.Delete(filePath);
+                _fileOperation.Delete(filePath);
             }
             catch (Exception ex)
             {

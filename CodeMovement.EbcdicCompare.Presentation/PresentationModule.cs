@@ -8,9 +8,11 @@ using CodeMovement.EbcdicCompare.Services;
 using CodeMovement.EbcdicCompare.Presentation.Controller;
 using CodeMovement.EbcdicCompare.Presentation.Interaction;
 using CodeMovement.EbcdicCompare.Presentation.View;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CodeMovement.EbcdicCompare.Presentation
 {
+    [ExcludeFromCodeCoverage]
     public class PresentationModule : IModule
     {
         private readonly IUnityContainer _unityContainer;
@@ -32,6 +34,7 @@ namespace CodeMovement.EbcdicCompare.Presentation
             _unityContainer.RegisterType<ICopybookRepository, CopybookRepository>(new ContainerControlledLifetimeManager());
             _unityContainer.RegisterType<IFileOperationsManager, FileOperationsManager>(new ContainerControlledLifetimeManager());
             _unityContainer.RegisterType<ICopybookManager, CopybookManager>(new ContainerControlledLifetimeManager());
+            _unityContainer.RegisterType<IFileOperation, FileOperation>(new ContainerControlledLifetimeManager());
 
             _unityContainer.RegisterType<HomeView>();
             _unityContainer.RegisterTypeForNavigation<HomeView>();
