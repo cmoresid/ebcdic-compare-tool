@@ -32,5 +32,23 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Converters
 
             Assert.AreEqual(false, result);
         }
+
+        [TestMethod]
+        public void NullableBoolConverter_Convert_Back_True()
+        {
+            var converter = new NullableBoolConverter();
+            var result = converter.Convert(true, null, null, null);
+
+            Assert.AreEqual(true, result);
+        }
+
+        [TestMethod]
+        public void NullableBoolConverter_Convert_Back_False()
+        {
+            var converter = new NullableBoolConverter();
+            var result = converter.Convert(false, null, null, null);
+
+            Assert.AreEqual(false, result);
+        }
     }
 }
