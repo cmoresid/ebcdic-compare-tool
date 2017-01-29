@@ -38,7 +38,7 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Converters
         public void NullableBoolInverterConverter_Convert_Back_Null()
         {
             var converter = new NullableBoolInvertConverter();
-            var result = converter.Convert(null, null, null, null);
+            var result = converter.ConvertBack(null, null, null, null);
 
             Assert.AreEqual(false, result);
         }
@@ -47,7 +47,7 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Converters
         public void NullableBoolInverterConverter_Convert_Back_True()
         {
             var converter = new NullableBoolInvertConverter();
-            var result = converter.Convert(true, null, null, null);
+            var result = converter.ConvertBack(true, null, null, null);
 
             Assert.AreEqual(false, result);
         }
@@ -56,7 +56,7 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Converters
         public void NullableBoolInverterConverter_Convert_Back_False()
         {
             var converter = new NullableBoolInvertConverter();
-            var result = converter.Convert(false, null, null, null);
+            var result = converter.ConvertBack(false, null, null, null);
 
             Assert.AreEqual(true, result);
         }
