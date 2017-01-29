@@ -109,6 +109,9 @@
     <None Include="TestData\Copybooks\customer.fileformat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="TestData\Copybooks\Invalid.fileformat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TestData\Copybooks\dependingOn.fileformat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -143,7 +146,17 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="TestData\EbcdicFiles\Person1_A.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestData\EbcdicFiles\Person1_B.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestData\EbcdicFiles\Person2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <None Include="TestData\EbcdicFiles\Address.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
