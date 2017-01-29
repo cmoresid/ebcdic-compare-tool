@@ -15,6 +15,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMovement.EbcdicCompare.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMovement.EbcdicCompare.UnitTests", "CodeMovement.EbcdicCompare.UnitTests\CodeMovement.EbcdicCompare.UnitTests.csproj", "{5B2332DE-9916-47E8-BBCE-25792639F1C1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F263FE0F-DC83-4EE5-A7BB-18D623DA8CB4}"
+	ProjectSection(SolutionItems) = preProject
+		CI_Config.testsettings = CI_Config.testsettings
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
