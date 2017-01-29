@@ -21,5 +21,10 @@
         {
             return System.IO.File.ReadAllLines(filePath);
         }
+
+        public long GetFileSize(string filePath)
+        {
+            return new System.IO.FileInfo(filePath).Length;
+        }
     }
 }

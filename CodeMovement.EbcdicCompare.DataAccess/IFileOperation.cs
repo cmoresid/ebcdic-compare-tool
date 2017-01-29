@@ -12,5 +12,6 @@ namespace CodeMovement.EbcdicCompare.DataAccess
         byte[] ReadAllBytes(string filePath);
         void Copy(string fromPath, string toPath, bool overwrite);
         void Delete(string filePath);
+        long GetFileSize(string filePath);
     }
 }

@@ -99,5 +99,23 @@ namespace CodeMovement.EbcdicCompare.Services
 
             return result;
         }
+
+        public OperationResult<long> GetFileSize(string filePath)
+        {
+            var result = new OperationResult<long>();
+
+            try
+            {
+                var fileSize = _fileOperation.GetFileSize(filePath);
+                result.Result = fileSize;
+            }
+            catch (Exception ex)
+            {
+                result.Result = -1;
+                result.AddMessage(ex.Message);
+            }
+
+            return result;
+        }
     }
 }

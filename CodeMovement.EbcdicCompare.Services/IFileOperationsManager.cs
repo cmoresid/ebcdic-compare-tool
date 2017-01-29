@@ -8,5 +8,6 @@ namespace CodeMovement.EbcdicCompare.Services
         OperationResult<byte[]> ReadFileAsBytes(string filePath);    
         OperationResult<string> CopyFile(string fromPath, string toPath);
         OperationResult<bool> DeleteFile(string filePath);
+        OperationResult<long> GetFileSize(string filePath);
     }
 }

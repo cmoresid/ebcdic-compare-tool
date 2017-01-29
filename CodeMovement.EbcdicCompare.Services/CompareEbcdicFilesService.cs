@@ -1,23 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using CodeMovement.EbcdicCompare.Models;
 using CodeMovement.EbcdicCompare.Models.Exception;
 using CodeMovement.EbcdicCompare.Models.Request;
 using CodeMovement.EbcdicCompare.Models.Result;
 using CodeMovement.EbcdicCompare.Models.ViewModel;
+using CodeMovement.EbcdicCompare.DataAccess;
 
 namespace CodeMovement.EbcdicCompare.Services
 {
     public class CompareEbcdicFilesService : ICompareEbcdicFilesService
     {
         private readonly IEbcdicReaderService _ebcdicReaderService;
+        private readonly IFileOperation _fileOperation;
 
-        public CompareEbcdicFilesService(IEbcdicReaderService ebcdicReaderService)
+        public CompareEbcdicFilesService(IEbcdicReaderService ebcdicReaderService, IFileOperation fileOperation)
         {
             _ebcdicReaderService = ebcdicReaderService;
+            _fileOperation = fileOperation;
         }
 
         public OperationResult<CompareEbcdicFileResult> Compare(CompareEbcdicFilesRequest request)
@@ -47,20 +49,20 @@ namespace CodeMovement.EbcdicCompare.Services
 
             try
             {
-                var file1 = new FileInfo(ebcdicFilePath1);
-                var file2 = new FileInfo(ebcdicFilePath2);
+                var file1Size = _fileOperation.GetFileSize(ebcdicFilePath1);
+                var file2Size = _fileOperation.GetFileSize(ebcdicFilePath2);
+    
+                result.Result.FirstEbcdicFile = GetEbcdicFileSize(file1Size);
+                result.Result.SecondEbcdicFile = GetEbcdicFileSize(file2Size);
 
-                if (file1.Length != file2.Length)
+                if (file1Size != file2Size)
                 {
                     result.Result.AreIdentical = false;
                     return result;
                 }
 
-                var file1Contents = File.ReadAllBytes(ebcdicFilePath1);
-                var file2Contents = File.ReadAllBytes(ebcdicFilePath2);
-
-                result.Result.FirstEbcdicFile = GetEbcdicFileSize(file1);
-                result.Result.SecondEbcdicFile = GetEbcdicFileSize(file2);
+                var file1Contents = _fileOperation.ReadAllBytes(ebcdicFilePath1);
+                var file2Contents = _fileOperation.ReadAllBytes(ebcdicFilePath2);
 
                 result.Result.AreIdentical =
                     file1Contents.Zip(file2Contents, (file1Byte, file2Byte) => file1Byte == file2Byte).All(r => r);
@@ -145,11 +147,11 @@ namespace CodeMovement.EbcdicCompare.Services
             };
         }
 
-        private static EbcdicFileAnalysis GetEbcdicFileSize(FileInfo ebcdicFile)
+        private static EbcdicFileAnalysis GetEbcdicFileSize(long fileSize)
         {
             return new EbcdicFileAnalysis
             {
-                FileSize = ebcdicFile.Length
+                FileSize = fileSize
             };
         }
 
