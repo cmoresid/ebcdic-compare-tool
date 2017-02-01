@@ -87,6 +87,9 @@ namespace CodeMovement.EbcdicCompare.Tests
     {
         public override void Publish(UpdateEbcdicFileGridResult payload)
         {
+            if (Mapping == null)
+                return;
+
             foreach (var kv in Mapping)
             {
                 if (kv.Key(payload))

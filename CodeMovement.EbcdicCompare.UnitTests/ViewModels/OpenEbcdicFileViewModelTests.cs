@@ -19,22 +19,36 @@ namespace CodeMovement.EbcdicCompare.Tests.ViewModels
 
         #region "Mock Helpers"
 
-        public IEventAggregator EventAggregatorStub
+        public IEventAggregator CreateEventAggregator(FinishReadEbcdicFileEventMock finishReadEvent = null,
+            ViewEbcdicFileRequestEventMock viewFileEvent = null,
+            CompareEbcdicFilesRequestEvent compareEvent = null,
+            FilterEbcdicRecordsEvent filterEvent = null,
+            UpdateEbcdicFileGridEvent updateEvent = null)
         {
-            get
-            {
-                var eventAggregatorMock = MockRepository.GenerateMock<IEventAggregator>();
-                var finishReadEbcdicFileEventMock = new FinishReadEbcdicFileEventMock();
-                var viewEbcdicFileRequestEventMock = new ViewEbcdicFileRequestEventMock();
+            var eventAggregatorMock = MockRepository.GenerateMock<IEventAggregator>();
 
-                eventAggregatorMock.Stub(m => m.GetEvent<FinishReadEbcdicFileEvent>())
-                    .Return(finishReadEbcdicFileEventMock).Repeat.Any();
+            finishReadEvent = finishReadEvent ?? new FinishReadEbcdicFileEventMock();
+            viewFileEvent = viewFileEvent ?? new ViewEbcdicFileRequestEventMock();
+            compareEvent = compareEvent ?? new CompareEbcdicFilesRequestEventMock();
+            filterEvent = filterEvent ?? new FilterEbcdicRecordsEventMock();
+            updateEvent = updateEvent ?? new UpdateEbcdicFileGridEventMock();
 
-                eventAggregatorMock.Stub(m => m.GetEvent<ViewEbcdicFileRequestEvent>())
-                    .Return(viewEbcdicFileRequestEventMock).Repeat.Any();
+            eventAggregatorMock.Expect(m => m.GetEvent<FinishReadEbcdicFileEvent>())
+                    .Return(finishReadEvent).Repeat.Any();
 
-                return eventAggregatorMock;
-            }
+            eventAggregatorMock.Expect(m => m.GetEvent<ViewEbcdicFileRequestEvent>())
+                .Return(viewFileEvent).Repeat.Any();
+
+            eventAggregatorMock.Expect(m => m.GetEvent<CompareEbcdicFilesRequestEvent>())
+               .Return(compareEvent).Repeat.Any();
+
+            eventAggregatorMock.Expect(m => m.GetEvent<FilterEbcdicRecordsEvent>())
+               .Return(filterEvent).Repeat.Any();
+
+            eventAggregatorMock.Expect(m => m.GetEvent<UpdateEbcdicFileGridEvent>())
+               .Return(updateEvent).Repeat.Any();
+
+            return eventAggregatorMock;
         }
 
         public IRegionManager RegionManagerMock
@@ -57,7 +71,7 @@ namespace CodeMovement.EbcdicCompare.Tests.ViewModels
         [TestMethod]
         public void Can_OpenEbcdicFileViewModel_View_Ebcdic_File_No_Fields_Set()
         {
-            var viewModel = new OpenEbcdicFileViewModel(EventAggregatorStub, 
+            var viewModel = new OpenEbcdicFileViewModel(CreateEventAggregator(), 
                 RegionManagerMock, CopybookManagerMock, FileDialogInteractionMock);
 
             Assert.IsFalse(viewModel.ReadEbcdicFile.CanExecute());
@@ -75,7 +89,7 @@ namespace CodeMovement.EbcdicCompare.Tests.ViewModels
             var fileInteractionMock = FileDialogInteractionMock;
             fileInteractionMock.Stub(m => m.OpenFileDialog("Select EBCDIC File")).Return(EbcdicFilePath);
 
-            var viewModel = new OpenEbcdicFileViewModel(EventAggregatorStub,
+            var viewModel = new OpenEbcdicFileViewModel(CreateEventAggregator(),
                 RegionManagerMock, copybookManagerMock, fileInteractionMock);
 
             viewModel.SelectEbcdicFile.Execute(null);
@@ -89,7 +103,7 @@ namespace CodeMovement.EbcdicCompare.Tests.ViewModels
             var fileInteractionMock = FileDialogInteractionMock;
             fileInteractionMock.Stub(m => m.OpenFileDialog("Select Copybook XML File")).Return(CopybookFilePath);
 
-            var viewModel = new OpenEbcdicFileViewModel(EventAggregatorStub,
+            var viewModel = new OpenEbcdicFileViewModel(CreateEventAggregator(),
                 RegionManagerMock, CopybookManagerMock, fileInteractionMock);
 
             viewModel.SelectCopybookFile.Execute(null);
@@ -106,7 +120,7 @@ namespace CodeMovement.EbcdicCompare.Tests.ViewModels
                 Result = null
             }).Repeat.Any();
 
-            var viewModel = new OpenEbcdicFileViewModel(EventAggregatorStub,
+            var viewModel = new OpenEbcdicFileViewModel(CreateEventAggregator(),
                 RegionManagerMock, copybookManagerMock, FileDialogInteractionMock);
 
             viewModel.EbcdicFilePath = EbcdicFilePath;
