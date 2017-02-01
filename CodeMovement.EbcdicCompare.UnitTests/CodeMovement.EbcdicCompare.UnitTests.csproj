@@ -98,6 +98,7 @@
     <Compile Include="Services\CompareEbcdicFilesServiceTests.cs" />
     <Compile Include="Services\CopybookManagerTests.cs" />
     <Compile Include="Services\FileOperationManagerTests.cs" />
+    <Compile Include="TestHelper.cs" />
     <Compile Include="ViewModels\CompareEbcdicFilesViewModelTests.cs" />
     <Compile Include="ViewModels\HomeViewModelTests.cs" />
     <Compile Include="ViewModels\ManageCopybooksViewModelTests.cs" />

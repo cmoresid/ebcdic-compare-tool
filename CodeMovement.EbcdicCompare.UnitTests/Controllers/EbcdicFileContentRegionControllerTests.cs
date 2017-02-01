@@ -1,19 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CodeMovement.EbcdicCompare.Presentation.View;
-using Microsoft.Practices.Unity;
 using Rhino.Mocks;
-using Prism.Regions;
 using CodeMovement.EbcdicCompare.Presentation.ViewModel;
 using CodeMovement.EbcdicCompare.Models.Constant;
 using Prism.Events;
 using CodeMovement.EbcdicCompare.Services;
 using CodeMovement.EbcdicCompare.Tests;
-using CodeMovement.EbcdicCompare.Presentation.Event;
 using CodeMovement.EbcdicCompare.Presentation.Controller;
 using CodeMovement.EbcdicCompare.Models.Request;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using System.IO;
 using CodeMovement.EbcdicCompare.DataAccess;
 using CodeMovement.EbcdicCompare.Models.Result;
@@ -24,42 +18,6 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Controllers
     [TestClass]
     public class EbcdicFileContentRegionControllerTests
     {
-        private const string TestData = @".\TestData";
-        private const string Copybooks = TestData + @"\Copybooks";
-        private const string EbcdicFiles = TestData + @"\EbcdicFiles";
-
-        public IEventAggregator CreateEventAggregator(FinishReadEbcdicFileEventMock finishReadEvent = null,
-            ViewEbcdicFileRequestEventMock viewFileEvent = null,
-            CompareEbcdicFilesRequestEvent compareEvent = null,
-            FilterEbcdicRecordsEvent filterEvent = null,
-            UpdateEbcdicFileGridEvent updateEvent = null)
-        {
-            var eventAggregatorMock = MockRepository.GenerateMock<IEventAggregator>();
-
-            finishReadEvent = finishReadEvent ?? new FinishReadEbcdicFileEventMock();
-            viewFileEvent = viewFileEvent ?? new ViewEbcdicFileRequestEventMock();
-            compareEvent = compareEvent ?? new CompareEbcdicFilesRequestEventMock();
-            filterEvent = filterEvent ?? new FilterEbcdicRecordsEventMock();
-            updateEvent = updateEvent ?? new UpdateEbcdicFileGridEventMock(); 
-
-            eventAggregatorMock.Expect(m => m.GetEvent<FinishReadEbcdicFileEvent>())
-                    .Return(finishReadEvent).Repeat.Any();
-
-            eventAggregatorMock.Expect(m => m.GetEvent<ViewEbcdicFileRequestEvent>())
-                .Return(viewFileEvent).Repeat.Any();
-
-            eventAggregatorMock.Expect(m => m.GetEvent<CompareEbcdicFilesRequestEvent>())
-               .Return(compareEvent).Repeat.Any();
-
-            eventAggregatorMock.Expect(m => m.GetEvent<FilterEbcdicRecordsEvent>())
-               .Return(filterEvent).Repeat.Any();
-
-            eventAggregatorMock.Expect(m => m.GetEvent<UpdateEbcdicFileGridEvent>())
-               .Return(updateEvent).Repeat.Any();
-
-            return eventAggregatorMock;
-        }
-
         private ICompareEbcdicFilesService CompareEbcdicFilesService
         {
             get { return new CompareEbcdicFilesService(new EbcdicReaderService(), new FileOperation()); }
@@ -75,7 +33,7 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Controllers
         {
             var viewEvent = new ViewEbcdicFileRequestEventMock();
             var compareEvent = new CompareEbcdicFilesRequestEventMock();
-            var eventAggregator = CreateEventAggregator(viewFileEvent: viewEvent, compareEvent: compareEvent);
+            var eventAggregator = TestHelper.CreateEventAggregator(viewFileEvent: viewEvent, compareEvent: compareEvent);
 
             var controller = new EbcdicFileContentRegionController(eventAggregator, CompareEbcdicFilesService);
 
@@ -98,7 +56,7 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Controllers
 
             var compareEvent = new CompareEbcdicFilesRequestEventMock();
             var updateEvent = new UpdateEbcdicFileGridEventMock();
-            var eventAggregator = CreateEventAggregator(viewFileEvent: viewEvent, 
+            var eventAggregator = TestHelper.CreateEventAggregator(viewFileEvent: viewEvent, 
                 updateEvent: updateEvent,
                 finishReadEvent: finishEvent);
             var gridViewModel = new EbcdicFileGridViewModel(eventAggregator);
@@ -108,8 +66,8 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Controllers
 
             viewEvent.Publish(new ViewEbcdicFileRequest
             {
-                EbcdicFilePath = Path.Combine(EbcdicFiles, "Person.txt"),
-                CopybookFilePath = Path.Combine(Copybooks, "Person.fileformat")
+                EbcdicFilePath = Path.Combine(TestHelper.EbcdicFiles, "Person.txt"),
+                CopybookFilePath = Path.Combine(TestHelper.Copybooks, "Person.fileformat")
             });
 
             Assert.AreEqual(10, gridViewModel.VisibleEbcdicFileRecords.Count);
@@ -130,7 +88,7 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Controllers
 
             var compareEvent = new CompareEbcdicFilesRequestEventMock();
             var updateEvent = new UpdateEbcdicFileGridEventMock();
-            var eventAggregator = CreateEventAggregator(viewFileEvent: viewEvent,
+            var eventAggregator = TestHelper.CreateEventAggregator(viewFileEvent: viewEvent,
                 compareEvent: compareEvent,
                 updateEvent: updateEvent,
                 finishReadEvent: finishEvent);
@@ -147,8 +105,8 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Controllers
 
             viewEvent.Publish(new ViewEbcdicFileRequest
             {
-                EbcdicFilePath = Path.Combine(EbcdicFiles, "Person.txt"),
-                CopybookFilePath = Path.Combine(Copybooks, "Person.fileformat")
+                EbcdicFilePath = Path.Combine(TestHelper.EbcdicFiles, "Person.txt"),
+                CopybookFilePath = Path.Combine(TestHelper.Copybooks, "Person.fileformat")
             });
 
             Assert.AreEqual(0, gridViewModel.VisibleEbcdicFileRecords.Count);
@@ -169,7 +127,7 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Controllers
 
             var compareEvent = new CompareEbcdicFilesRequestEventMock();
             var updateEvent = new UpdateEbcdicFileGridEventMock();
-            var eventAggregator = CreateEventAggregator(compareEvent: compareEvent,
+            var eventAggregator = TestHelper.CreateEventAggregator(compareEvent: compareEvent,
                 updateEvent: updateEvent,
                 finishReadEvent: finishEvent);
 
@@ -183,9 +141,9 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Controllers
 
             compareEvent.Publish(new CompareEbcdicFilesRequest
             {
-                FirstEbcdicFilePath = Path.Combine(EbcdicFiles, "Person.txt"),
-                SecondEbcdicFilePath = Path.Combine(EbcdicFiles, "Person1_B.txt"),
-                CopybookFilePath = Path.Combine(Copybooks, "Person.fileformat")
+                FirstEbcdicFilePath = Path.Combine(TestHelper.EbcdicFiles, "Person.txt"),
+                SecondEbcdicFilePath = Path.Combine(TestHelper.EbcdicFiles, "Person1_B.txt"),
+                CopybookFilePath = Path.Combine(TestHelper.Copybooks, "Person.fileformat")
             });
 
             Assert.AreEqual(10, firstGridView.VisibleEbcdicFileRecords.Count);

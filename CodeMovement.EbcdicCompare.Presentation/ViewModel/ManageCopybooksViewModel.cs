@@ -18,7 +18,7 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 
         private readonly ICopybookManager _copybookManager;
         private readonly IFileDialogInteraction _fileDialogInteraction;
-        private readonly IFileOperationsManager _fileOperationsManger;
+        private readonly IFileOperationsManager _fileOperationsManager;
 
         private string _selectedNewCopybookFile;
         private string _selectedNewEbcdicFile;
@@ -42,7 +42,7 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
         {
             _copybookManager = copybookManager;
             _fileDialogInteraction = fileDialogInteraction;
-            _fileOperationsManger = fileOperationsManager;
+            _fileOperationsManager = fileOperationsManager;
 
             ErrorConfirmationRequest = new InteractionRequest<INotification>();
             ShowCopybookRequest = new InteractionRequest<INotification>();
@@ -238,7 +238,7 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 
         private void OnViewCopybook()
         {
-            var copybookContentsResults = _fileOperationsManger.ReadFileAsString(SelectedCopybook.FilePath);
+            var copybookContentsResults = _fileOperationsManager.ReadFileAsString(SelectedCopybook.FilePath);
 
             if (copybookContentsResults.Result != null)
             {

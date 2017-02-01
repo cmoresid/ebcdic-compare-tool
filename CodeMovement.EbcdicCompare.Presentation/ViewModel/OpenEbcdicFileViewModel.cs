@@ -82,11 +82,6 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 
         #region "View Model Bindable Properties"
 
-        public List<string> AvailableEncodings
-        {
-            get { return Encoding.AvailableEncodings; }
-        }
-
         public string EbcdicFilePath
         {
             get { return _ebcdicFilePath; }
