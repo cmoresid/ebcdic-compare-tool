@@ -126,6 +126,7 @@
                     ShowInitialCompareIndicator = false;
                     ShowOpenFilesInExternalEditorRow = false;
                     FinishedCompare = false;
+                    FilterByRecordDifferences = false;
                     break;
                 case States.SelectLegacyFile:
                 case States.SelectModernizedFile:

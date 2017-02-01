@@ -2,16 +2,9 @@
 
 namespace CodeMovement.EbcdicCompare.Models.Request
 {
-    public enum EbcdicRecordGrid
-    {
-        LegacyGrid,
-        ModernizedGrid,
-        Both
-    }
-
     public class FilterEbcdicRecordsRequest
     {
-        public EbcdicRecordGrid Target { get; set; }
+        public string RegionName { get; set; }
         public List<RecordFlag> FilterBy { get; set; }
     }
 }

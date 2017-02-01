@@ -11,6 +11,8 @@ using CodeMovement.EbcdicCompare.Models.Result;
 using CodeMovement.EbcdicCompare.Services;
 using CodeMovement.EbcdicCompare.Presentation.Event;
 using CodeMovement.EbcdicCompare.Presentation.Interaction;
+using System.Collections.ObjectModel;
+using CodeMovement.EbcdicCompare.Models.ViewModel;
 
 namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 {
@@ -171,9 +173,11 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
             CopybookFilePath = null;
             IsLoadingEbcdicFile = false;
 
-            EventAggregator.GetEvent<ClearEbcdicFileGridEvent>().Publish(new ClearEbcdicFileGridRequest
+            EventAggregator.GetEvent<UpdateEbcdicFileGridEvent>().Publish(new UpdateEbcdicFileGridResult
             {
-                EventType = ReadEbcdicFileEventType.ViewEbcdicFile
+                Region = RegionNames.ViewEbcdicFileContentRegion,
+                AllEbcdicFileRecordModels = new ObservableCollection<EbcdicFileRecordModel>(),
+                VisibleEbcdicFileRecords = new ObservableCollection<EbcdicFileRecordModel>()
             });
         }
 

@@ -9,6 +9,7 @@ using CodeMovement.EbcdicCompare.Presentation.Controller;
 using CodeMovement.EbcdicCompare.Presentation.Interaction;
 using CodeMovement.EbcdicCompare.Presentation.View;
 using System.Diagnostics.CodeAnalysis;
+using CodeMovement.EbcdicCompare.Presentation.ViewModel;
 
 namespace CodeMovement.EbcdicCompare.Presentation
 {
@@ -51,17 +52,30 @@ namespace CodeMovement.EbcdicCompare.Presentation
             _unityContainer.RegisterType<EbcdicFileGridView>();
 
             _regionManager.RegisterViewWithRegion(RegionNames.ViewEbcdicFileContentRegion,
-                () => _unityContainer.Resolve<EbcdicFileGridView>());
+                () => CreateGridViewWith(RegionNames.ViewEbcdicFileContentRegion));
 
             _regionManager.RegisterViewWithRegion(RegionNames.FirstEbcdicFileContentRegion,
-                () => _unityContainer.Resolve<EbcdicFileGridView>());
+                () => CreateGridViewWith(RegionNames.FirstEbcdicFileContentRegion));
 
             _regionManager.RegisterViewWithRegion(RegionNames.SecondEbcdicFileContentRegion,
-                () => _unityContainer.Resolve<EbcdicFileGridView>());
+                () => CreateGridViewWith(RegionNames.SecondEbcdicFileContentRegion));
 
             // Initialize our controller -> It will be kept alive through out the program's life cycle
             // because the event aggregator will keep a strong reference to it.
             _ebcdicFileContentRegionController = _unityContainer.Resolve<EbcdicFileContentRegionController>();
         }
+
+        #region "Helper Methods"
+
+        private EbcdicFileGridView CreateGridViewWith(string regionName)
+        {
+            var view = _unityContainer.Resolve<EbcdicFileGridView>();
+            var viewModel = view.DataContext as EbcdicFileGridViewModel;
+            viewModel.RegionName = regionName;
+
+            return view;
+        }
+
+        #endregion
     }
 }

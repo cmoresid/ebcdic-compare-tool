@@ -13,6 +13,8 @@ using CodeMovement.EbcdicCompare.Models.Result;
 using CodeMovement.EbcdicCompare.Services;
 using CodeMovement.EbcdicCompare.Presentation.Event;
 using CodeMovement.EbcdicCompare.Presentation.Interaction;
+using System.Collections.ObjectModel;
+using CodeMovement.EbcdicCompare.Models.ViewModel;
 
 namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 {
@@ -264,7 +266,13 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
             EventAggregator.GetEvent<FilterEbcdicRecordsEvent>().Publish(new FilterEbcdicRecordsRequest
             {
                 FilterBy = filterCriteria,
-                Target = EbcdicRecordGrid.Both
+                RegionName = RegionNames.FirstEbcdicFileContentRegion
+            });
+
+            EventAggregator.GetEvent<FilterEbcdicRecordsEvent>().Publish(new FilterEbcdicRecordsRequest
+            {
+                FilterBy = filterCriteria,
+                RegionName = RegionNames.SecondEbcdicFileContentRegion
             });
         }
 
@@ -333,9 +341,18 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
         {
             CurrentState = States.Initial;
 
-            EventAggregator.GetEvent<ClearEbcdicFileGridEvent>().Publish(new ClearEbcdicFileGridRequest
+            EventAggregator.GetEvent<UpdateEbcdicFileGridEvent>().Publish(new UpdateEbcdicFileGridResult
             {
-                EventType = ReadEbcdicFileEventType.CompareEbcdicFiles
+                Region = RegionNames.FirstEbcdicFileContentRegion,
+                AllEbcdicFileRecordModels = new ObservableCollection<EbcdicFileRecordModel>(),
+                VisibleEbcdicFileRecords = new ObservableCollection<EbcdicFileRecordModel>()
+            });
+
+            EventAggregator.GetEvent<UpdateEbcdicFileGridEvent>().Publish(new UpdateEbcdicFileGridResult
+            {
+                Region = RegionNames.SecondEbcdicFileContentRegion,
+                AllEbcdicFileRecordModels = new ObservableCollection<EbcdicFileRecordModel>(),
+                VisibleEbcdicFileRecords = new ObservableCollection<EbcdicFileRecordModel>()
             });
         }
 

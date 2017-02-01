@@ -90,11 +90,11 @@
     <Compile Include="Converter\FlagToIconConverter.cs" />
     <Compile Include="Converter\NullableBoolConverter.cs" />
     <Compile Include="Converter\NullableBoolInvertConverter.cs" />
-    <Compile Include="Event\ClearEbcdicFileGridEvent.cs" />
     <Compile Include="Event\CompareEbcdicFilesRequestEvent.cs" />
     <Compile Include="Event\FilterEbcdicRecordsEvent.cs" />
     <Compile Include="Event\FinishCompareEbcdicFilesEvent.cs" />
     <Compile Include="Event\FinishReadEbcdicFileEvent.cs" />
+    <Compile Include="Event\UpdateEbcdicFileGridEvent.cs" />
     <Compile Include="Event\ViewEbcdicFileRequestEvent.cs" />
     <Compile Include="Event\WindowResizeEvent.cs" />
     <Compile Include="Interaction\FileDialogInteraction.cs" />

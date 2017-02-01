@@ -11,9 +11,18 @@ namespace CodeMovement.EbcdicCompare.Tests
         public override void Publish(ViewEbcdicFileRequest payload)
         {
             ReceivedPayload = payload;
+            Callback(payload);
+        }
+
+        public override SubscriptionToken Subscribe(Action<ViewEbcdicFileRequest> action, ThreadOption threadOption, bool keepSubscriberReferenceAlive, Predicate<ViewEbcdicFileRequest> filter)
+        {
+            Callback = action;
+            return new SubscriptionToken(e => { });
         }
 
         public ViewEbcdicFileRequest ReceivedPayload { get; private set; }
+
+        public Action<ViewEbcdicFileRequest> Callback { get; private set; }
     }
 
     public class FinishReadEbcdicFileEventMock : FinishReadEbcdicFileEvent
@@ -35,13 +44,41 @@ namespace CodeMovement.EbcdicCompare.Tests
         public Action<FinishReadEbcdicFile> Callback { get; private set; }
     }
 
-    public class ClearEbcdicFileGridEventMock : ClearEbcdicFileGridEvent
+    public class CompareEbcdicFilesRequestEventMock : CompareEbcdicFilesRequestEvent
     {
-        public override void Publish(ClearEbcdicFileGridRequest payload)
+        public override void Publish(CompareEbcdicFilesRequest payload)
         {
             ReceivedPayload = payload;
+            Callback(payload);
         }
 
-        public ClearEbcdicFileGridRequest ReceivedPayload { get; private set; }
+        public override SubscriptionToken Subscribe(Action<CompareEbcdicFilesRequest> action, ThreadOption threadOption, bool keepSubscriberReferenceAlive, Predicate<CompareEbcdicFilesRequest> filter)
+        {
+            Callback = action;
+            return new SubscriptionToken(e => { });
+        }
+
+        public CompareEbcdicFilesRequest ReceivedPayload { get; private set; }
+
+        public Action<CompareEbcdicFilesRequest> Callback { get; private set; }
+    }
+
+    public class FilterEbcdicRecordsEventMock : FilterEbcdicRecordsEvent
+    {
+        public override void Publish(FilterEbcdicRecordsRequest payload)
+        {
+            ReceivedPayload = payload;
+            Callback(payload);
+        }
+
+        public override SubscriptionToken Subscribe(Action<FilterEbcdicRecordsRequest> action, ThreadOption threadOption, bool keepSubscriberReferenceAlive, Predicate<FilterEbcdicRecordsRequest> filter)
+        {
+            Callback = action;
+            return new SubscriptionToken(e => { });
+        }
+
+        public FilterEbcdicRecordsRequest ReceivedPayload { get; private set; }
+
+        public Action<FilterEbcdicRecordsRequest> Callback { get; private set; }
     }
 }

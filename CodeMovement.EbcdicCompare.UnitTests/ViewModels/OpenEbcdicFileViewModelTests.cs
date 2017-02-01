@@ -26,16 +26,12 @@ namespace CodeMovement.EbcdicCompare.Tests.ViewModels
                 var eventAggregatorMock = MockRepository.GenerateMock<IEventAggregator>();
                 var finishReadEbcdicFileEventMock = new FinishReadEbcdicFileEventMock();
                 var viewEbcdicFileRequestEventMock = new ViewEbcdicFileRequestEventMock();
-                var clearEbcdicFileGridEventMock = new ClearEbcdicFileGridEventMock();
 
                 eventAggregatorMock.Stub(m => m.GetEvent<FinishReadEbcdicFileEvent>())
                     .Return(finishReadEbcdicFileEventMock).Repeat.Any();
 
                 eventAggregatorMock.Stub(m => m.GetEvent<ViewEbcdicFileRequestEvent>())
                     .Return(viewEbcdicFileRequestEventMock).Repeat.Any();
-
-                eventAggregatorMock.Stub(m => m.GetEvent<ClearEbcdicFileGridEvent>())
-                    .Return(clearEbcdicFileGridEventMock).Repeat.Any();
 
                 return eventAggregatorMock;
             }
