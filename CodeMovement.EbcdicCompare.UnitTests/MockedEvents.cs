@@ -3,6 +3,7 @@ using Prism.Events;
 using CodeMovement.EbcdicCompare.Models.Request;
 using CodeMovement.EbcdicCompare.Models.Result;
 using CodeMovement.EbcdicCompare.Presentation.Event;
+using System.Collections.Generic;
 
 namespace CodeMovement.EbcdicCompare.Tests
 {
@@ -80,5 +81,27 @@ namespace CodeMovement.EbcdicCompare.Tests
         public FilterEbcdicRecordsRequest ReceivedPayload { get; private set; }
 
         public Action<FilterEbcdicRecordsRequest> Callback { get; private set; }
+    }
+
+    public class UpdateEbcdicFileGridEventMock : UpdateEbcdicFileGridEvent
+    {
+        public override void Publish(UpdateEbcdicFileGridResult payload)
+        {
+            foreach (var kv in Mapping)
+            {
+                if (kv.Key(payload))
+                    kv.Value(payload);
+            }
+        }
+
+        public override SubscriptionToken Subscribe(Action<UpdateEbcdicFileGridResult> action, ThreadOption threadOption, bool keepSubscriberReferenceAlive, Predicate<UpdateEbcdicFileGridResult> filter)
+        {
+            Mapping = Mapping ?? new Dictionary<Predicate<UpdateEbcdicFileGridResult>, Action<UpdateEbcdicFileGridResult>>();
+            Mapping[filter] = action;
+
+            return new SubscriptionToken((e) => { });
+        }
+
+        public Dictionary<Predicate<UpdateEbcdicFileGridResult>, Action<UpdateEbcdicFileGridResult>> Mapping { get; private set; }
     }
 }

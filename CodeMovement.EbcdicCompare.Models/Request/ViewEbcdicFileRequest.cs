@@ -6,6 +6,5 @@ namespace CodeMovement.EbcdicCompare.Models.Request
     {
         public string EbcdicFilePath { get; set; }
         public string CopybookFilePath { get; set; }
-        public Encoding Encoding { get; set; }
     }
 }

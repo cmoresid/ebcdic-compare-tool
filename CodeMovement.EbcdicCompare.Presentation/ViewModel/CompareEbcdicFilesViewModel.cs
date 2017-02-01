@@ -236,7 +236,6 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
             EventAggregator.GetEvent<CompareEbcdicFilesRequestEvent>().Publish(new CompareEbcdicFilesRequest
             {
                 CopybookFilePath = CopybookFilePath,
-                Encoding = Encoding.Ascii,
                 FirstEbcdicFilePath = LegacyEbcdicFilePath,
                 SecondEbcdicFilePath = ModernizedEbcdicFilePath
             });

@@ -16,19 +16,19 @@ namespace CodeMovement.EbcdicCompare.Presentation.Controller
         private readonly UpdateEbcdicFileGridEvent _updateGridEvent;
 
         public EbcdicFileContentRegionController(
-            ICompareEbcdicFilesService compareEbcdicFilesService,
-            IEventAggregator eventAggregator)
+            IEventAggregator eventAggregator,
+            ICompareEbcdicFilesService compareEbcdicFilesService)
         {
             _compareEbcdicFilesService = compareEbcdicFilesService;
             _eventAggregator = eventAggregator;
+
+            _updateGridEvent = _eventAggregator.GetEvent<UpdateEbcdicFileGridEvent>();
 
             _eventAggregator.GetEvent<ViewEbcdicFileRequestEvent>().Subscribe(OnViewEbcdicFile,
                 ThreadOption.BackgroundThread, true, null);
 
             _eventAggregator.GetEvent<CompareEbcdicFilesRequestEvent>().Subscribe(OnCompareEbcdicFiles,
                 ThreadOption.BackgroundThread, true);
-
-            _updateGridEvent = _eventAggregator.GetEvent<UpdateEbcdicFileGridEvent>();
         }
 
         #region "Event Handlers"
@@ -48,8 +48,7 @@ namespace CodeMovement.EbcdicCompare.Presentation.Controller
             {
                 FirstEbcdicFilePath = request.EbcdicFilePath,
                 SecondEbcdicFilePath = null,
-                CopybookFilePath = request.CopybookFilePath,
-                Encoding = Encoding.Ascii
+                CopybookFilePath = request.CopybookFilePath
             });
 
             if (results.Messages.Count == 0)
@@ -84,13 +83,7 @@ namespace CodeMovement.EbcdicCompare.Presentation.Controller
             var comparisonResults = _compareEbcdicFilesService.Compare(request);
 
             if (comparisonResults.Messages.Count > 0)
-            {
                 finishReadEbcdicFile.ErrorMessage = comparisonResults.Messages[0];
-                finishedReadingEvent.Publish(new FinishReadEbcdicFile
-                {
-                    ErrorMessage = comparisonResults.Messages[0]
-                });
-            }
 
             UpdateEbcdicFileGrid(RegionNames.FirstEbcdicFileContentRegion,
                 comparisonResults.Result.FirstEbcdicFile.EbcdicFileRecords);
