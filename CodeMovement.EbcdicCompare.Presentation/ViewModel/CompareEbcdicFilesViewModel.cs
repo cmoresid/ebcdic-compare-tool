@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Prism.Commands;
@@ -15,6 +14,7 @@ using CodeMovement.EbcdicCompare.Presentation.Event;
 using CodeMovement.EbcdicCompare.Presentation.Interaction;
 using System.Collections.ObjectModel;
 using CodeMovement.EbcdicCompare.Models.ViewModel;
+using CodeMovement.EbcdicCompare.DataAccess;
 
 namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 {
@@ -33,6 +33,7 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
         private readonly ICompareEbcdicFilesService _compareEbcdicFilesService;
         private readonly IExternalProgramService _externalProgramService;
         private readonly ICopybookManager _copybookManager;
+        private readonly IConfigurationSettings _configurationSettings;
 
         private static readonly WindowSize OpenEbcdicFileWindowSize = new WindowSize(1000, 800);
 
@@ -43,6 +44,7 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
             IFileDialogInteraction fileDialog,
             ICompareEbcdicFilesService compareEbcdicFilesService,
             ICopybookManager copybookManager,
+            IConfigurationSettings configurationSettings,
             IExternalProgramService externalProgramService)
             : base(regionManager, eventAggregator, OpenEbcdicFileWindowSize)
         {
@@ -50,6 +52,7 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
             _compareEbcdicFilesService = compareEbcdicFilesService;
             _externalProgramService = externalProgramService;
             _copybookManager = copybookManager;
+            _configurationSettings = configurationSettings;
 
             ConfigureCommands();
 
@@ -217,8 +220,10 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 
         private void OnOpenExternalEditor()
         {
-            _externalProgramService.RunProgram(ExternalEditor, string.Format("\"{0}\"", LegacyEbcdicFilePath));
-            _externalProgramService.RunProgram(ExternalEditor, string.Format("\"{0}\"", ModernizedEbcdicFilePath));
+            _externalProgramService.RunProgram(_configurationSettings.ExternalEditorPath, 
+                string.Format("\"{0}\"", LegacyEbcdicFilePath));
+            _externalProgramService.RunProgram(_configurationSettings.ExternalEditorPath, 
+                string.Format("\"{0}\"", ModernizedEbcdicFilePath));
 
             OnResetView();
         }
@@ -322,11 +327,6 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
             }
 
             return false;
-        }
-
-        private static string ExternalEditor
-        {
-            get { return ConfigurationManager.AppSettings["ExternalEditor"]; }
         }
 
         private bool CanPerformInitialCompare()

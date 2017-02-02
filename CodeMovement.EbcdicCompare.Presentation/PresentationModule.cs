@@ -32,10 +32,11 @@ namespace CodeMovement.EbcdicCompare.Presentation
             _unityContainer.RegisterType<ICompareEbcdicFilesService, CompareEbcdicFilesService>();
             _unityContainer.RegisterType<IFileDialogInteraction, FileDialogInteraction>(new ContainerControlledLifetimeManager());
             _unityContainer.RegisterType<IExternalProgramService, ExternalProgramService>();
-            _unityContainer.RegisterType<ICopybookRepository, CopybookRepository>(new ContainerControlledLifetimeManager());
-            _unityContainer.RegisterType<IFileOperationsManager, FileOperationsManager>(new ContainerControlledLifetimeManager());
-            _unityContainer.RegisterType<ICopybookManager, CopybookManager>(new ContainerControlledLifetimeManager());
-            _unityContainer.RegisterType<IFileOperation, FileOperation>(new ContainerControlledLifetimeManager());
+            _unityContainer.RegisterType<ICopybookRepository, CopybookRepository>();
+            _unityContainer.RegisterType<IConfigurationSettings, ConfigurationSettings>(new ContainerControlledLifetimeManager());
+            _unityContainer.RegisterType<IFileOperationsManager, FileOperationsManager>();
+            _unityContainer.RegisterType<ICopybookManager, CopybookManager>();
+            _unityContainer.RegisterType<IFileOperation, FileOperation>();
 
             _unityContainer.RegisterType<HomeView>();
             _unityContainer.RegisterTypeForNavigation<HomeView>();

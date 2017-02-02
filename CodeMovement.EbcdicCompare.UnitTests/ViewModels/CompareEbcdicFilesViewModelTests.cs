@@ -25,7 +25,7 @@ namespace CodeMovement.EbcdicCompare.Tests.ViewModels
 
             var viewModel = new CompareEbcdicFilesViewModel(eventAggregator, TestHelper.RegionManagerMock,
                 TestHelper.FileDialogInteractionMock, TestHelper.CompareEbcdicFilesServiceMock,
-                TestHelper.CopybookManagerMock, TestHelper.ExternalProgramServiceMock);
+                TestHelper.CopybookManagerMock, TestHelper.ConfigurationSettingsMock, TestHelper.ExternalProgramServiceMock);
 
             Assert.IsNotNull(viewModel.ErrorConfirmationRequest);
             Assert.IsNotNull(viewModel.SelectLegacyFile);
@@ -69,8 +69,8 @@ namespace CodeMovement.EbcdicCompare.Tests.ViewModels
             fileInteraction.Expect(m => m.OpenFileDialog("Select Modernized EBCDIC file")).Return(file2);
 
             var viewModel = new CompareEbcdicFilesViewModel(eventAggregator, TestHelper.RegionManagerMock,
-                fileInteraction, compareService,
-                TestHelper.CopybookManagerMock, TestHelper.ExternalProgramServiceMock);
+                fileInteraction, compareService, TestHelper.CopybookManagerMock, TestHelper.ConfigurationSettingsMock, 
+                TestHelper.ExternalProgramServiceMock);
 
             Assert.IsFalse(viewModel.PerformInitialCompare.CanExecute());
 
@@ -113,8 +113,8 @@ namespace CodeMovement.EbcdicCompare.Tests.ViewModels
             fileInteraction.Expect(m => m.OpenFileDialog("Select Modernized EBCDIC file")).Return(file2);
 
             var viewModel = new CompareEbcdicFilesViewModel(eventAggregator, TestHelper.RegionManagerMock,
-                fileInteraction, compareService,
-                TestHelper.CopybookManagerMock, TestHelper.ExternalProgramServiceMock);
+                fileInteraction, compareService, TestHelper.CopybookManagerMock, 
+                TestHelper.ConfigurationSettingsMock, TestHelper.ExternalProgramServiceMock);
 
             Assert.IsFalse(viewModel.PerformInitialCompare.CanExecute());
 
@@ -151,7 +151,7 @@ namespace CodeMovement.EbcdicCompare.Tests.ViewModels
 
             var viewModel = new CompareEbcdicFilesViewModel(eventAggregator, TestHelper.RegionManagerMock,
                 TestHelper.FileDialogInteractionMock, TestHelper.CompareEbcdicFilesServiceMock,
-                TestHelper.CopybookManagerMock, externalProgram);
+                TestHelper.CopybookManagerMock, TestHelper.ConfigurationSettingsMock, externalProgram);
 
             // Set state to files do not match.
             viewModel.LegacyEbcdicFilePath = file1;
@@ -193,7 +193,7 @@ namespace CodeMovement.EbcdicCompare.Tests.ViewModels
 
             var viewModel = new CompareEbcdicFilesViewModel(eventAggregator, TestHelper.RegionManagerMock,
                 TestHelper.FileDialogInteractionMock, TestHelper.CompareEbcdicFilesServiceMock,
-                copybookManager, TestHelper.ExternalProgramServiceMock);
+                copybookManager, TestHelper.ConfigurationSettingsMock, TestHelper.ExternalProgramServiceMock);
 
             // Set state to files do not match.
             viewModel.LegacyEbcdicFilePath = file1;
@@ -235,7 +235,7 @@ namespace CodeMovement.EbcdicCompare.Tests.ViewModels
 
             var viewModel = new CompareEbcdicFilesViewModel(eventAggregator, TestHelper.RegionManagerMock,
                 TestHelper.FileDialogInteractionMock, TestHelper.CompareEbcdicFilesServiceMock,
-                copybookManager, TestHelper.ExternalProgramServiceMock);
+                copybookManager, TestHelper.ConfigurationSettingsMock, TestHelper.ExternalProgramServiceMock);
 
             // Set state to files do not match.
             viewModel.LegacyEbcdicFilePath = file1;
@@ -265,7 +265,7 @@ namespace CodeMovement.EbcdicCompare.Tests.ViewModels
 
             var viewModel = new CompareEbcdicFilesViewModel(eventAggregator, TestHelper.RegionManagerMock,
                 TestHelper.FileDialogInteractionMock, TestHelper.CompareEbcdicFilesServiceMock,
-                TestHelper.CopybookManagerMock, TestHelper.ExternalProgramServiceMock);
+                TestHelper.CopybookManagerMock, TestHelper.ConfigurationSettingsMock, TestHelper.ExternalProgramServiceMock);
 
             // Set state to ready perform copybook compare
             viewModel.LegacyEbcdicFilePath = file1;

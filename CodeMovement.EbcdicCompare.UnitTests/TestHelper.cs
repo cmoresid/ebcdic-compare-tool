@@ -1,4 +1,5 @@
-﻿using CodeMovement.EbcdicCompare.Presentation.Event;
+﻿using CodeMovement.EbcdicCompare.DataAccess;
+using CodeMovement.EbcdicCompare.Presentation.Event;
 using CodeMovement.EbcdicCompare.Presentation.Interaction;
 using CodeMovement.EbcdicCompare.Services;
 using CodeMovement.EbcdicCompare.Tests;
@@ -74,6 +75,16 @@ namespace CodeMovement.EbcdicCompare.UnitTests
         public static ICompareEbcdicFilesService CompareEbcdicFilesServiceMock
         {
             get { return MockRepository.GenerateMock<ICompareEbcdicFilesService>(); }
+        }
+
+        public static IConfigurationSettings ConfigurationSettingsMock
+        {
+            get { return MockRepository.GenerateMock<IConfigurationSettings>(); }
+        }
+
+        public static ICopybookRepository CopybookRepositoryMock
+        {
+            get { return MockRepository.GenerateMock<ICopybookRepository>(); }
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SQLite;
 using System.Linq;
 using CodeMovement.EbcdicCompare.DataAccess.Model;
@@ -11,6 +10,13 @@ namespace CodeMovement.EbcdicCompare.DataAccess
 {
     public class CopybookRepository : ICopybookRepository
     {
+        private readonly IConfigurationSettings _settings;
+
+        public CopybookRepository(IConfigurationSettings settings)
+        {
+            _settings = settings;
+        }
+
         #region "SQL Statements"
 
         private const string InsertCopybookEbcdicFileAssociationSql =
@@ -62,7 +68,7 @@ namespace CodeMovement.EbcdicCompare.DataAccess
 
         public IEnumerable<CopybookAssociation> GetCopybooks()
         {
-            using (var connection = new SQLiteConnection(ConnectionString))
+            using (var connection = new SQLiteConnection(_settings.CopybookDbConnectionString))
             {
                 connection.Open();
 
@@ -81,17 +87,9 @@ namespace CodeMovement.EbcdicCompare.DataAccess
 
         #region "Helper Methods"
 
-        private static string ConnectionString
+        private object ExecuteScalar(string sqlStatement, params SQLiteParameter[] parameters)
         {
-            get
-            {
-                return ConfigurationManager.ConnectionStrings["CopybookDb"].ConnectionString;
-            }
-        }
-
-        private static object ExecuteScalar(string sqlStatement, params SQLiteParameter[] parameters)
-        {
-            using (var connection = new SQLiteConnection(ConnectionString))
+            using (var connection = new SQLiteConnection(_settings.CopybookDbConnectionString))
             {
                 connection.Open();
 
@@ -105,13 +103,13 @@ namespace CodeMovement.EbcdicCompare.DataAccess
             }
         }
 
-        private static OperationResult<bool> ExecuteNonQuery(string sqlStatement, params SQLiteParameter[] parameters)
+        private OperationResult<bool> ExecuteNonQuery(string sqlStatement, params SQLiteParameter[] parameters)
         {
             var result = new OperationResult<bool>();
 
             try
             {
-                using (var connection = new SQLiteConnection(ConnectionString))
+                using (var connection = new SQLiteConnection(_settings.CopybookDbConnectionString))
                 {
                     connection.Open();
 

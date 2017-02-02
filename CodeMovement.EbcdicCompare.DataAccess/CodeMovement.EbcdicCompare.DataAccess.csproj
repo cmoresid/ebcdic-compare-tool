@@ -47,8 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigurationSettings.cs" />
     <Compile Include="CopybookRepository.cs" />
     <Compile Include="FileOperation.cs" />
+    <Compile Include="IConfigurationSettings.cs" />
     <Compile Include="ICopybookRepository.cs" />
     <Compile Include="IFileOperation.cs" />
     <Compile Include="Model\CopybookEbcdicFilePair.cs" />

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using CodeMovement.EbcdicCompare.DataAccess;
 using CodeMovement.EbcdicCompare.Models;
 using CodeMovement.EbcdicCompare.Models.Result;
@@ -10,11 +9,15 @@ namespace CodeMovement.EbcdicCompare.Services
     {
         private readonly ICopybookRepository _copybookRepository;
         private readonly IFileOperationsManager _fileOperationsManager;
+        private readonly IConfigurationSettings _configurationSettings;
 
-        public CopybookManager(ICopybookRepository copybookRepository, IFileOperationsManager fileOperationsManager)
+        public CopybookManager(ICopybookRepository copybookRepository, 
+            IConfigurationSettings configurationSettings,
+            IFileOperationsManager fileOperationsManager)
         {
             _copybookRepository = copybookRepository;
             _fileOperationsManager = fileOperationsManager;
+            _configurationSettings = configurationSettings;
         }
 
         public OperationResult<bool> AddCopybookEbcdicFileAssociation(string copybookName, string ebcdicFileName)
@@ -22,7 +25,7 @@ namespace CodeMovement.EbcdicCompare.Services
             if (GetCopybookPathForEbcdicFile(ebcdicFileName).Result != null)
                 return OperationResult<bool>.CreateResult(false, "EBCDIC file is already associated with a copybook.");
 
-            var addCopybookFileResult = _fileOperationsManager.CopyFile(copybookName, ConfigurationManager.AppSettings["CopybookLocation"]);
+            var addCopybookFileResult = _fileOperationsManager.CopyFile(copybookName, _configurationSettings.CopybookFolderPath);
 
             return addCopybookFileResult.Result != null 
                 ? _copybookRepository.AddCopybookEbcdicFileAssociation(addCopybookFileResult.Result, ebcdicFileName) 

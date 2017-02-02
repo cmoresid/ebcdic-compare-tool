@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CodeMovement.EbcdicCompare.DataAccess;
 using CodeMovement.EbcdicCompare.Models.Result;
 using CodeMovement.EbcdicCompare.Services;
+using CodeMovement.EbcdicCompare.UnitTests;
 
 namespace CodeMovement.EbcdicCompare.Tests.Services
 {
@@ -12,26 +13,6 @@ namespace CodeMovement.EbcdicCompare.Tests.Services
     public class CopybookManagerTests
     {
         #region "Helper Methods"
-
-        protected IFileOperationsManager FileOperationsManagerStub 
-        { 
-            get { return MockRepository.GenerateStub<IFileOperationsManager>(); } 
-        }
-
-        protected IFileOperationsManager FileOperationsManagerMock
-        {
-            get { return MockRepository.GenerateMock<IFileOperationsManager>(); }
-        }
-
-        protected ICopybookRepository CopybookRepositoryStub
-        {
-            get { return MockRepository.GenerateStub<ICopybookRepository>(); }
-        }
-
-        protected ICopybookRepository CopybookRepositoryMock
-        {
-            get { return MockRepository.GenerateMock<ICopybookRepository>(); }
-        }
 
         protected string CopybookTestDataPath
         {
@@ -43,10 +24,11 @@ namespace CodeMovement.EbcdicCompare.Tests.Services
         [TestMethod]
         public void Does_CopybookManager_Delete_Association()
         {
-            var copybookRepositoryMock = CopybookRepositoryMock;
+            var copybookRepositoryMock = TestHelper.CopybookRepositoryMock;
             copybookRepositoryMock.Expect(m => m.DeleteCopybookFileAssociation("COPYBOOK1", "EBCDICFILE1"));
 
-            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, FileOperationsManagerStub);
+            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, 
+                TestHelper.ConfigurationSettingsMock, TestHelper.FileOperationsManagerMock);
             copybookManager.DeleteCopybookFileAssociation("COPYBOOK1", "EBCDICFILE1");
 
             copybookRepositoryMock.VerifyAllExpectations();
@@ -55,10 +37,12 @@ namespace CodeMovement.EbcdicCompare.Tests.Services
         [TestMethod]
         public void Does_CopybookManager_Get_All_Copybooks()
         {
-            var copybookRepositoryMock = CopybookRepositoryMock;
+            var copybookRepositoryMock = TestHelper.CopybookRepositoryMock;
             copybookRepositoryMock.Expect(m => m.GetCopybooks());
 
-            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, FileOperationsManagerStub);
+            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, 
+                TestHelper.ConfigurationSettingsMock, TestHelper.FileOperationsManagerMock);
+
             copybookManager.GetCopybooks();
 
             copybookRepositoryMock.VerifyAllExpectations();
@@ -69,13 +53,15 @@ namespace CodeMovement.EbcdicCompare.Tests.Services
         {
             var ebcdicFileName = "EBCDICFILE1";
 
-            var copybookRepositoryMock = CopybookRepositoryMock;
+            var copybookRepositoryMock = TestHelper.CopybookRepositoryMock;
             copybookRepositoryMock.Expect(m => m.GetCopybookPathForEbcdicFile(ebcdicFileName)).Return(new OperationResult<string>
             {
                 Result = "COPYBOOK1"
             });
 
-            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, FileOperationsManagerStub);
+            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, 
+                TestHelper.ConfigurationSettingsMock, TestHelper.FileOperationsManagerMock);
+
             var result = copybookManager.AddCopybookEbcdicFileAssociation("COPYBOOK1", ebcdicFileName);
 
             copybookRepositoryMock.VerifyAllExpectations();
@@ -89,17 +75,19 @@ namespace CodeMovement.EbcdicCompare.Tests.Services
         {
             const string ebcdicFileName = "EBCDICFILE1";
 
-            var copybookRepositoryMock = CopybookRepositoryMock;
+            var copybookRepositoryMock = TestHelper.CopybookRepositoryMock;
             copybookRepositoryMock.Expect(m => m.GetCopybookPathForEbcdicFile(ebcdicFileName)).Return(new OperationResult<string>());
 
-            var fileOperationsManager = FileOperationsManagerMock;
+            var fileOperationsManager = TestHelper.FileOperationsManagerMock;
             fileOperationsManager.Expect(m => m.CopyFile(Arg<string>.Is.Anything, Arg<string>.Is.Anything)).Return(new OperationResult<string>()
             {
                 Result = null,
                 Messages = new List<string>() { "Some error message" }
             });
 
-            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, fileOperationsManager);
+            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, 
+                TestHelper.ConfigurationSettingsMock, fileOperationsManager);
+
             var result = copybookManager.AddCopybookEbcdicFileAssociation("COPYBOOK1", ebcdicFileName);
 
             copybookRepositoryMock.VerifyAllExpectations();
@@ -114,7 +102,7 @@ namespace CodeMovement.EbcdicCompare.Tests.Services
         {
             const string ebcdicFileName = "EBCDICFILE1";
 
-            var copybookRepositoryMock = CopybookRepositoryMock;
+            var copybookRepositoryMock = TestHelper.CopybookRepositoryMock;
             copybookRepositoryMock.Expect(m => m.GetCopybookPathForEbcdicFile(ebcdicFileName)).Return(new OperationResult<string>());
             copybookRepositoryMock.Expect(
                 m => m.AddCopybookEbcdicFileAssociation(Arg<string>.Is.Anything, Arg<string>.Is.Anything))
@@ -123,13 +111,15 @@ namespace CodeMovement.EbcdicCompare.Tests.Services
                     Result = true
                 });
 
-            var fileOperationsManager = FileOperationsManagerMock;
+            var fileOperationsManager = TestHelper.FileOperationsManagerMock;
             fileOperationsManager.Expect(m => m.CopyFile(Arg<string>.Is.Anything, Arg<string>.Is.Anything)).Return(new OperationResult<string>()
             {
                 Result = @"C:\New\CopybookFilePath\COPYBOOK1.fileformat"
             });
 
-            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, fileOperationsManager);
+            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, 
+                TestHelper.ConfigurationSettingsMock, fileOperationsManager);
+
             var result = copybookManager.AddCopybookEbcdicFileAssociation("COPYBOOK1.fileformat", ebcdicFileName);
 
             copybookRepositoryMock.VerifyAllExpectations();
@@ -144,10 +134,12 @@ namespace CodeMovement.EbcdicCompare.Tests.Services
         {
             const string ebcdicFileName = @"C:\Files\EBCDICFILE1";
 
-            var copybookRepositoryMock = CopybookRepositoryMock;
+            var copybookRepositoryMock = TestHelper.CopybookRepositoryMock;
             copybookRepositoryMock.Expect(m => m.GetCopybookPathForEbcdicFile("EBCDICFILE1"));
 
-            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, FileOperationsManagerStub);
+            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, 
+                TestHelper.ConfigurationSettingsMock, TestHelper.FileOperationsManagerMock);
+
             var result = copybookManager.GetCopybookPathForEbcdicFile(ebcdicFileName);
 
             copybookRepositoryMock.VerifyAllExpectations();
@@ -158,16 +150,18 @@ namespace CodeMovement.EbcdicCompare.Tests.Services
         {
             const string copybookPath = @"C:\New\CopybookFilePath\COPYBOOK1.fileformat";
 
-            var copybookRepositoryMock = CopybookRepositoryMock;
+            var copybookRepositoryMock = TestHelper.CopybookRepositoryMock;
             copybookRepositoryMock.Expect(m => m.DeleteCopybook(copybookPath)).Return(new OperationResult<bool>
             {
                 Result = false,
                 Messages = new List<string> { "Some error message" }
             });
 
-            var fileOperationsManagerMock = FileOperationsManagerMock;
+            var fileOperationsManagerMock = TestHelper.FileOperationsManagerMock;
 
-            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, fileOperationsManagerMock);
+            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, 
+                TestHelper.ConfigurationSettingsMock, fileOperationsManagerMock);
+
             var result = copybookManager.DeleteCopybook(copybookPath);
 
             fileOperationsManagerMock.AssertWasNotCalled(m => m.DeleteFile(copybookPath));
@@ -179,20 +173,22 @@ namespace CodeMovement.EbcdicCompare.Tests.Services
         {
             const string copybookPath = @"C:\New\CopybookFilePath\COPYBOOK1.fileformat";
 
-            var copybookRepositoryMock = CopybookRepositoryMock;
+            var copybookRepositoryMock = TestHelper.CopybookRepositoryMock;
             copybookRepositoryMock.Expect(m => m.DeleteCopybook(copybookPath)).Return(new OperationResult<bool>
             {
                 Result = true
             });
 
-            var fileOperationsManagerMock = FileOperationsManagerMock;
+            var fileOperationsManagerMock = TestHelper.FileOperationsManagerMock;
             fileOperationsManagerMock.Expect(m => m.DeleteFile(copybookPath)).Return(new OperationResult<bool>
             {
                 Result = false,
                 Messages = new List<string> {"Some Error"}
             });
 
-            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, fileOperationsManagerMock);
+            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, 
+                TestHelper.ConfigurationSettingsMock, fileOperationsManagerMock);
+
             var result = copybookManager.DeleteCopybook(copybookPath);
 
             copybookRepositoryMock.VerifyAllExpectations();
@@ -208,19 +204,21 @@ namespace CodeMovement.EbcdicCompare.Tests.Services
         {
             const string copybookPath = @"C:\New\CopybookFilePath\COPYBOOK1.fileformat";
 
-            var copybookRepositoryMock = CopybookRepositoryMock;
+            var copybookRepositoryMock = TestHelper.CopybookRepositoryMock;
             copybookRepositoryMock.Expect(m => m.DeleteCopybook(copybookPath)).Return(new OperationResult<bool>
             {
                 Result = true
             });
 
-            var fileOperationsManagerMock = FileOperationsManagerMock;
+            var fileOperationsManagerMock = TestHelper.FileOperationsManagerMock;
             fileOperationsManagerMock.Expect(m => m.DeleteFile(copybookPath)).Return(new OperationResult<bool>
             {
                 Result = true
             });
 
-            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, fileOperationsManagerMock);
+            ICopybookManager copybookManager = new CopybookManager(copybookRepositoryMock, 
+                TestHelper.ConfigurationSettingsMock, fileOperationsManagerMock);
+
             var result = copybookManager.DeleteCopybook(copybookPath);
 
             copybookRepositoryMock.VerifyAllExpectations();
