@@ -2,11 +2,9 @@
 {
     public partial class CompareEbcdicFilesViewModel
     {
-        protected enum States
+        public enum States
         {
             Initial,
-            SelectLegacyFile,
-            SelectModernizedFile,
             ReadyToPerformInitialCompare,
             PerformingInitialCompare,
             FinishedInitialCompare,
@@ -20,7 +18,7 @@
             FinishedCopybookCompare
         }
 
-        protected States CurrentState
+        public States CurrentState
         {
             get { return _currentState; }
             set
@@ -127,17 +125,6 @@
                     ShowOpenFilesInExternalEditorRow = false;
                     FinishedCompare = false;
                     FilterByRecordDifferences = false;
-                    break;
-                case States.SelectLegacyFile:
-                case States.SelectModernizedFile:
-                    UseCopybook = null;
-                    ShowFilesDoNotMatchLabel = false;
-                    ShowFilesMatchLabel = false;
-                    ShowCompareUsingCopybookRow = false;
-                    ShowOpenFilesInExternalEditorRow = false;
-                    ShowSelectCopybookRow = false;
-                    ShowCopybookCompareButtonRow = false;
-                    ShowCopybookCompareIndicator = false;
                     break;
                 case States.PerformingInitialCompare:
                     ShowInitialCompareIndicator = true;

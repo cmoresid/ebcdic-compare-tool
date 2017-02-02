@@ -50,7 +50,7 @@ namespace CodeMovement.EbcdicCompare.Tests
         public override void Publish(CompareEbcdicFilesRequest payload)
         {
             ReceivedPayload = payload;
-            Callback(payload);
+            Callback?.Invoke(payload);
         }
 
         public override SubscriptionToken Subscribe(Action<CompareEbcdicFilesRequest> action, ThreadOption threadOption, bool keepSubscriberReferenceAlive, Predicate<CompareEbcdicFilesRequest> filter)
@@ -69,7 +69,8 @@ namespace CodeMovement.EbcdicCompare.Tests
         public override void Publish(FilterEbcdicRecordsRequest payload)
         {
             ReceivedPayload = payload;
-            Callback(payload);
+
+            Callback?.Invoke(payload);
         }
 
         public override SubscriptionToken Subscribe(Action<FilterEbcdicRecordsRequest> action, ThreadOption threadOption, bool keepSubscriberReferenceAlive, Predicate<FilterEbcdicRecordsRequest> filter)

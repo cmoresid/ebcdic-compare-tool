@@ -34,7 +34,7 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
         private readonly IExternalProgramService _externalProgramService;
         private readonly ICopybookManager _copybookManager;
 
-        private static readonly WindowSize OpenEbcdicFileWindowSize = new WindowSize(1000, 700);
+        private static readonly WindowSize OpenEbcdicFileWindowSize = new WindowSize(1000, 800);
 
         #endregion
 
@@ -84,25 +84,41 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
         public string LegacyEbcdicFilePath
         {
             get { return _legacyEbcdicFilePath; }
-            set { SetProperty(ref _legacyEbcdicFilePath, value); }
+            set
+            {
+                _legacyEbcdicFilePath = value;
+                OnPropertyChanged("LegacyEbcdicFilePath");
+            }
         }
 
         public string ModernizedEbcdicFilePath
         {
             get { return _modernizedEbcdicFilePath; }
-            set { SetProperty(ref _modernizedEbcdicFilePath, value); }
+            set
+            {
+                _modernizedEbcdicFilePath = value;
+                OnPropertyChanged("ModernizedEbcdicFilePath");
+            }
         }
 
         public string CopybookFilePath
         {
             get { return _copybookFilePath; }
-            set { SetProperty(ref _copybookFilePath, value); }
+            set
+            {
+                _copybookFilePath = value;
+                OnPropertyChanged("CopybookFilePath");
+            }
         }
 
         public bool? UseCopybook
         {
             get { return _useCopybook; }
-            set { SetProperty(ref _useCopybook, value); }
+            set
+            {
+                _useCopybook = value;
+                OnPropertyChanged("UseCopybook");
+            }
         }
 
         public bool FilterByRecordDifferences
@@ -110,7 +126,9 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
             get { return _filterByRecordDifferences; }
             set
             {
-                SetProperty(ref _filterByRecordDifferences, value);
+                _filterByRecordDifferences = value;
+                OnPropertyChanged("FilterByRecordDifferences");
+
                 OnShowOnlyRecordDifferences();
             }
         }

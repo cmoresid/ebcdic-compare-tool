@@ -65,5 +65,15 @@ namespace CodeMovement.EbcdicCompare.UnitTests
         {
             get { return MockRepository.GenerateMock<IFileOperationsManager>(); }
         }
+
+        public static IExternalProgramService ExternalProgramServiceMock
+        {
+            get { return MockRepository.GenerateMock<IExternalProgramService>(); }
+        }
+
+        public static ICompareEbcdicFilesService CompareEbcdicFilesServiceMock
+        {
+            get { return MockRepository.GenerateMock<ICompareEbcdicFilesService>(); }
+        }
     }
 }

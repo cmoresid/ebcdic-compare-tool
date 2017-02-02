@@ -41,8 +41,10 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 
         private void OnFilterByEbcdicFileGrid(FilterEbcdicRecordsRequest request)
         {
-            VisibleEbcdicFileRecords = new ObservableCollection<EbcdicFileRecordModel>(
-                AllEbcdicFileRecordModels.Where(record => request.FilterBy.Contains(record.Flag)));
+            VisibleEbcdicFileRecords = (VisibleEbcdicFileRecords != null) 
+                ? new ObservableCollection<EbcdicFileRecordModel>(
+                    AllEbcdicFileRecordModels.Where(record => request.FilterBy.Contains(record.Flag)))
+                : null;
         }
 
         private void OnUpdateEbcdicFileGrid(UpdateEbcdicFileGridResult result)
