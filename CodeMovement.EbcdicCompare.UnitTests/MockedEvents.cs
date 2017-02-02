@@ -106,6 +106,11 @@ namespace CodeMovement.EbcdicCompare.Tests
             return new SubscriptionToken((e) => { });
         }
 
+        internal void Subscribe(bool v)
+        {
+            throw new NotImplementedException();
+        }
+
         public Dictionary<Predicate<UpdateEbcdicFileGridResult>, Action<UpdateEbcdicFileGridResult>> Mapping { get; private set; }
     }
 }

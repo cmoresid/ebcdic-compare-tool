@@ -68,6 +68,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data.SQLite, Version=1.0.104.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.104.0\lib\net451\System.Data.SQLite.dll</HintPath>
       <Private>True</Private>
@@ -98,6 +99,7 @@
     <Compile Include="Converters\FlagToIconConverterTests.cs" />
     <Compile Include="Converters\NullableBoolConverterTests.cs" />
     <Compile Include="Converters\NullableBoolInvertConverterTests.cs" />
+    <Compile Include="DataAccess\ConfigurationSettingsTests.cs" />
     <Compile Include="DataAccess\CopybookRepositoryTests.cs" />
     <Compile Include="MockedEvents.cs" />
     <Compile Include="Models\EbcdicFileRecordModelTests.cs" />
@@ -107,6 +109,7 @@
     <Compile Include="Services\FileOperationManagerTests.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="ViewModels\CompareEbcdicFilesViewModelTests.cs" />
+    <Compile Include="ViewModels\EbcdicFileGridViewModelTests.cs" />
     <Compile Include="ViewModels\HomeViewModelTests.cs" />
     <Compile Include="ViewModels\ManageCopybooksViewModelTests.cs" />
     <Compile Include="ViewModels\OpenEbcdicFileViewModelTests.cs" />
@@ -130,6 +133,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="TestData\Copybooks\Address.fileformat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
