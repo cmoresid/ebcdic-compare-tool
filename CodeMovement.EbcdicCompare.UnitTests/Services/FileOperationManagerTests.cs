@@ -232,5 +232,41 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Services
 
             fileOperation.VerifyAllExpectations();
         }
+
+        [TestMethod]
+        public void Does_FileOperationManager_Retrieve_File_Byte_Size_Successfully()
+        {
+            var filePath = @"C:\My\File.txt";
+
+            var fileOperation = FileOperationMock;
+            fileOperation.Expect(m => m.GetFileSize(filePath)).Return(10);
+
+            var fileOperationManager = new FileOperationsManager(fileOperation);
+            var results = fileOperationManager.GetFileSize(filePath);
+
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results.Successful);
+            Assert.AreEqual(10, results.Result);
+
+            fileOperation.VerifyAllExpectations();
+        }
+
+        [TestMethod]
+        public void Does_FileOperationManager_Return_Negative_One_On_Failure()
+        {
+            var filePath = @"C:\My\File.txt";
+
+            var fileOperation = FileOperationMock;
+            fileOperation.Expect(m => m.GetFileSize(filePath)).Throw(new FileNotFoundException());
+
+            var fileOperationManager = new FileOperationsManager(fileOperation);
+            var results = fileOperationManager.GetFileSize(filePath);
+
+            Assert.IsNotNull(results);
+            Assert.IsFalse(results.Successful);
+            Assert.AreEqual(-1, results.Result);
+
+            fileOperation.VerifyAllExpectations();
+        }
     }
 }

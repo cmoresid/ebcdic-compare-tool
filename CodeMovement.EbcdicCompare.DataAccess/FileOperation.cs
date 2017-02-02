@@ -1,5 +1,8 @@
-﻿namespace CodeMovement.EbcdicCompare.DataAccess
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace CodeMovement.EbcdicCompare.DataAccess
 {
+    [ExcludeFromCodeCoverage]
     public class FileOperation : IFileOperation
     {
         public void Copy(string fromPath, string toPath, bool overwrite)
