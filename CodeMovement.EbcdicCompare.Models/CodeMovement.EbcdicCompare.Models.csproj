@@ -61,7 +61,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constant\EbcdicConstants.cs" />
-    <Compile Include="Constant\Encoding.cs" />
     <Compile Include="Constant\ReadEbcdicFileEventType.cs" />
     <Compile Include="Constant\RegionNames.cs" />
     <Compile Include="Constant\ViewIdentity.cs" />
@@ -96,7 +95,6 @@
     <Compile Include="Request\FilterEbcdicRecordsRequest.cs" />
     <Compile Include="Request\ViewEbcdicFileRequest.cs" />
     <Compile Include="Result\CompareEbcdicFileResult.cs" />
-    <Compile Include="Result\ComparisonResult.cs" />
     <Compile Include="Result\EbcdicFileAnalysis.cs" />
     <Compile Include="Result\FinishReadEbcdicFile.cs" />
     <Compile Include="Result\OperationResult.cs" />
