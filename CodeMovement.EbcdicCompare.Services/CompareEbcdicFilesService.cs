@@ -8,6 +8,7 @@ using CodeMovement.EbcdicCompare.Models.Request;
 using CodeMovement.EbcdicCompare.Models.Result;
 using CodeMovement.EbcdicCompare.Models.ViewModel;
 using CodeMovement.EbcdicCompare.DataAccess;
+using System.Text;
 
 namespace CodeMovement.EbcdicCompare.Services
 {
@@ -125,14 +126,40 @@ namespace CodeMovement.EbcdicCompare.Services
                 if (firstCurrentFileRecord.Equals(secondCurrentFileRecord))
                 {
                     firstCurrentFileRecord.Flag = RecordFlag.Identical;
+                    firstCurrentFileRecord.Differences = null;
+
                     secondCurrentFileRecord.Flag = RecordFlag.Identical;
+                    secondCurrentFileRecord.Differences = null;
                 }
                 else
                 {
                     firstCurrentFileRecord.Flag = RecordFlag.Different;
                     secondCurrentFileRecord.Flag = RecordFlag.Different;
+
+                    MarkDifferences(firstCurrentFileRecord, secondCurrentFileRecord);
                 }
             }
+        }
+
+        private static void MarkDifferences(EbcdicFileRecordModel firstFileRecord, EbcdicFileRecordModel secondFileRecord)
+        {
+            var firstRecordStr = firstFileRecord.RowValue;
+            var secondRecordStr = secondFileRecord.RowValue;
+            var minLength = Math.Min(firstRecordStr.Length, secondRecordStr.Length);
+            var differenceString = new StringBuilder();
+
+            int i = 0;
+            for (; i < Math.Min(firstRecordStr.Length, secondRecordStr.Length); i++)
+                differenceString.Append(firstRecordStr[i] != secondRecordStr[i] ? "^" : " ");
+
+            while (i < Math.Max(firstRecordStr.Length, secondRecordStr.Length))
+            {
+                differenceString.Append("^");
+                i++;
+            }
+
+            firstFileRecord.Differences = differenceString.ToString();
+            secondFileRecord.Differences = differenceString.ToString();
         }
 
         private static EbcdicFileAnalysis AnalyzeEbcdicFileRecords(ObservableCollection<EbcdicFileRecordModel> records)

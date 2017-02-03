@@ -31,6 +31,12 @@ namespace CodeMovement.EbcdicCompare.Models.ViewModel
         public string RecordTypeName { get; set; }
         public string ColumnHeading { get; set; }
         public string RowValue { get; set; }
+        public string Differences { get; set; }
+
+        public bool ShowDifferences
+        {
+            get { return !string.IsNullOrWhiteSpace(Differences); }
+        }
 
         public void PopulateColumnHeading()
         {

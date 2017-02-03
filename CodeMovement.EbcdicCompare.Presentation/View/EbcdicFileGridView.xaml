@@ -8,6 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <conv:FlagToIconConverter x:Key="FlagConverter" />
+        <conv:BoolToGridRowHeightConverter x:Key="BoolToGridRowHeightConverter" />
     </UserControl.Resources>
     <Grid>
         <DataGrid VerticalAlignment="Stretch" 
@@ -21,41 +22,26 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
+                            <RowDefinition Height="21" />
+                            <RowDefinition Height="{Binding ShowDifferences, 
+                                Converter={StaticResource BoolToGridRowHeightConverter}, 
+                                ConverterParameter=19}" />
                         </Grid.RowDefinitions>
 
                         <TextBlock FontFamily="Consolas" Grid.Column="0" Grid.Row="0" TextWrapping="NoWrap" 
                                    Text="{Binding ColumnHeading}" Foreground="DarkOrchid" />
-                        <TextBlock FontFamily="Consolas" Margin="0,5"  Grid.Column="0" Grid.Row="1" Text="{Binding RowValue}" TextWrapping="NoWrap" />
+                        <TextBlock FontFamily="Consolas" Margin="0,5" Grid.Column="0" Grid.Row="1" Text="{Binding RowValue}" TextWrapping="NoWrap" />
+                        <TextBlock FontFamily="Consolas" Margin="0,5" Grid.Column="0" Grid.Row="2" 
+                                   Text="{Binding Differences}" Foreground="Red" TextWrapping="NoWrap" />
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="RowNumberTemplate">
-                    <Grid HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <TextBlock FontFamily="Consolas" Grid.Column="0" Grid.Row="0"></TextBlock>
-                        <TextBlock FontFamily="Consolas" Margin="0,5" Grid.Column="0" Grid.Row="1" Text="{Binding RowNumber}" />
-                    </Grid>
+                    <TextBlock FontFamily="Consolas" Margin="0,5" VerticalAlignment="Center" Text="{Binding RowNumber}" />
                 </DataTemplate>
                 <DataTemplate x:Key="RowFlagTemplate">
-                    <Grid HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <TextBlock FontFamily="Consolas" Grid.Column="0" Grid.Row="0" />
-                        <Image Margin="0,5" Grid.Column="0" Grid.Row="1" Width="16" Height="16" 
+                    <Image Margin="0,5" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Width="16" Height="16" VerticalAlignment="Center"
                                Source="{Binding Flag, Mode=OneTime, Converter={StaticResource FlagConverter}}" />
-                    </Grid>
                 </DataTemplate>
             </DataGrid.Resources>
             <DataGrid.Columns>

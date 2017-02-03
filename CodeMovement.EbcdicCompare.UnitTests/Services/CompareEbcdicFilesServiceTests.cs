@@ -248,5 +248,44 @@ namespace CodeMovement.EbcdicCompare.Tests.Services
 
             Assert.AreEqual(RecordFlag.Extra, compareResult.SecondEbcdicFile.EbcdicFileRecords[2].Flag);
         }
+
+        [TestMethod]
+        public void EbcdicCompareService_Compare_And_Mark_Differences()
+        {
+            var file1 = Path.Combine(EbcdicFiles, "Person1_A.txt");
+            var file2 = Path.Combine(EbcdicFiles, "Person1_B.txt");
+            var copybook = Path.Combine(Copybooks, "Person.fileformat");
+
+            var compareEbcdicFilesService = CompareEbcdicFilesService;
+
+            var result = compareEbcdicFilesService.Compare(new CompareEbcdicFilesRequest
+            {
+                FirstEbcdicFilePath = file1,
+                SecondEbcdicFilePath = file2,
+                CopybookFilePath = copybook
+            });
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Successful);
+            Assert.IsNotNull(result.Result);
+
+            var compareResults = result.Result;
+            var file1Records = compareResults.FirstEbcdicFile.EbcdicFileRecords;
+            var file2Records = compareResults.SecondEbcdicFile.EbcdicFileRecords;
+
+            Assert.IsTrue(string.IsNullOrWhiteSpace(file1Records[0].Differences));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(file2Records[0].Differences));
+            Assert.IsFalse(file1Records[0].ShowDifferences);
+            Assert.IsFalse(file2Records[0].ShowDifferences);
+
+            Assert.IsFalse(string.IsNullOrWhiteSpace(file1Records[1].Differences));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(file2Records[1].Differences));
+            Assert.IsTrue(file1Records[1].ShowDifferences);
+            Assert.IsTrue(file2Records[1].ShowDifferences);
+            
+
+            Assert.AreEqual("          ^^^^^^ ^          ^ ", file1Records[1].Differences);
+            Assert.AreEqual("          ^^^^^^ ^          ^ ", file2Records[1].Differences);
+        }
     }
 }

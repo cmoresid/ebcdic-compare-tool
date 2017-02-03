@@ -5,6 +5,7 @@
 .sonarqube
 results.xml
 opencover.xml
+GeneratedReports/
 
 # User-specific files
 *.suo
