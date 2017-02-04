@@ -18,6 +18,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F263FE0F-DC83-4EE5-A7BB-18D623DA8CB4}"
 	ProjectSection(SolutionItems) = preProject
 		CI_Config.testsettings = CI_Config.testsettings
+		CreateReleasePackage.bat = CreateReleasePackage.bat
 		GenerateUnitTestMetrics.bat = GenerateUnitTestMetrics.bat
 	EndProjectSection
 EndProject
