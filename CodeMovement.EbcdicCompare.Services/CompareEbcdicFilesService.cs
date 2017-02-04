@@ -145,7 +145,6 @@ namespace CodeMovement.EbcdicCompare.Services
         {
             var firstRecordStr = firstFileRecord.RowValue;
             var secondRecordStr = secondFileRecord.RowValue;
-            var minLength = Math.Min(firstRecordStr.Length, secondRecordStr.Length);
             var differenceString = new StringBuilder();
 
             int i = 0;
