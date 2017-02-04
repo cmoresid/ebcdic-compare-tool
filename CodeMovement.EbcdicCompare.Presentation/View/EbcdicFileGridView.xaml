@@ -13,7 +13,7 @@
     </UserControl.Resources>
     <Grid>
         <DataGrid VerticalAlignment="Stretch" 
-                  VerticalContentAlignment="Stretch" MinHeight="50" AutoGenerateColumns="False"
+                  VerticalContentAlignment="Stretch" MinHeight="150" AutoGenerateColumns="False"
                   Margin="10,10"
                   ItemsSource="{Binding VisibleEbcdicFileRecords}">
             <DataGrid.Resources>

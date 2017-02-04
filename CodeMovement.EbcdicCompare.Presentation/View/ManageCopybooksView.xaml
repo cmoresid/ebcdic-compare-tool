@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:controls="clr-namespace:CodeMovement.EbcdicCompare.Presentation.Controls"
              xmlns:views="clr-namespace:CodeMovement.EbcdicCompare.Presentation.View"
              mc:Ignorable="d" 
              d:DesignHeight="520" d:DesignWidth="580">
@@ -103,14 +104,14 @@
             </Grid>
 
             <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">Step 1: Select Copybook XML</Label>
-            <TextBox Grid.Column="1" Grid.Row="3" Margin="10,0" VerticalAlignment="Center"
-                 IsReadOnly="True" Text="{Binding SelectedNewCopybookFile}"/>
+            <controls:FilePathTextBox Grid.Column="1" Grid.Row="3" Margin="10,0" VerticalAlignment="Center"
+                 IsReadOnly="True" Text="{Binding SelectedNewCopybookFile, UpdateSourceTrigger=PropertyChanged}" />
             <Button Grid.Column="2" Grid.Row="3" Margin="10,0" VerticalAlignment="Center"
                 Command="{Binding SelectNewCopybookCommand}">Browse</Button>
 
             <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">Step 2: Select EBCDIC File</Label>
-            <TextBox Grid.Column="1" Grid.Row="4" Margin="10,0" VerticalAlignment="Center"
-                 IsReadOnly="True" Text="{Binding SelectedNewEbcdicFile}"/>
+            <controls:FilePathTextBox Grid.Column="1" Grid.Row="4" Margin="10,0" VerticalAlignment="Center"
+                 IsReadOnly="True" Text="{Binding SelectedNewEbcdicFile, UpdateSourceTrigger=PropertyChanged}" />
             <Button Grid.Column="2" Grid.Row="4" Margin="10,0" VerticalAlignment="Center"
                 Command="{Binding SelectNewEbcdicFileCommand}">Browse</Button>
 
