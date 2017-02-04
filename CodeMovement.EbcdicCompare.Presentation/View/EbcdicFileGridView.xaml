@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              xmlns:conv="clr-namespace:CodeMovement.EbcdicCompare.Presentation.Converter"
+             xmlns:scroll="clr-namespace:CodeMovement.EbcdicCompare.Presentation.Controls"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <conv:FlagToIconConverter x:Key="FlagConverter" />
@@ -12,7 +13,7 @@
     </UserControl.Resources>
     <Grid>
         <DataGrid VerticalAlignment="Stretch" 
-                  VerticalContentAlignment="Stretch" MinHeight="300" AutoGenerateColumns="False"
+                  VerticalContentAlignment="Stretch" MinHeight="50" AutoGenerateColumns="False"
                   Margin="10,10"
                   ItemsSource="{Binding VisibleEbcdicFileRecords}">
             <DataGrid.Resources>
@@ -43,6 +44,9 @@
                     <Image Margin="0,5" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Width="16" Height="16" VerticalAlignment="Center"
                                Source="{Binding Flag, Mode=OneTime, Converter={StaticResource FlagConverter}}" />
                 </DataTemplate>
+                <Style TargetType="ScrollViewer">
+                    <Setter Property="scroll:ScrollSynchronizer.ScrollGroup" Value="{Binding GroupName}" />
+                </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTemplateColumn CellTemplate="{StaticResource RowFlagTemplate}" />

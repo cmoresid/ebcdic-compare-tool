@@ -2,7 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Mocks;
 using CodeMovement.EbcdicCompare.Tests;
-using CodeMovement.EbcdicCompare.Presentation.Event;
 using CodeMovement.EbcdicCompare.Models.Request;
 using Prism.Events;
 using CodeMovement.EbcdicCompare.Models.Result;
@@ -33,6 +32,8 @@ namespace CodeMovement.EbcdicCompare.UnitTests.ViewModels
             var eventAggregator = TestHelper.CreateEventAggregator(filterEvent: filterEvent, updateEvent: updateEvent);
 
             var viewModel = new EbcdicFileGridViewModel(eventAggregator);
+
+            Assert.AreEqual("DefaultGroup", viewModel.GroupName);
 
             filterEvent.VerifyAllExpectations();
         }

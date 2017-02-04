@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\EbcdicFileContentRegionController.cs" />
+    <Compile Include="Controls\ScrollSynchronizer.cs" />
     <Compile Include="Converter\BooleanConverter.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\BoolToGridRowHeightConverter.cs" />

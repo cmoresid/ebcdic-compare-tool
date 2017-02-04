@@ -14,6 +14,8 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
         private ObservableCollection<EbcdicFileRecordModel> _visibleEbcdicFileRecords;
         private readonly IEventAggregator _eventAggregator;
 
+        private string _groupName;
+
         public EbcdicFileGridViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
@@ -23,9 +25,21 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 
             _eventAggregator.GetEvent<UpdateEbcdicFileGridEvent>().Subscribe(OnUpdateEbcdicFileGrid,
                 ThreadOption.UIThread, false, (e) => e.Region == RegionName);
+
+            GroupName = "DefaultGroup";
         }
 
         public string RegionName { get; set; }
+
+        public string GroupName
+        {
+            get { return _groupName; }
+            set
+            {
+                _groupName = value;
+                OnPropertyChanged("GroupName");
+            }
+        }
 
         public ObservableCollection<EbcdicFileRecordModel> AllEbcdicFileRecordModels { get; set; }
 
