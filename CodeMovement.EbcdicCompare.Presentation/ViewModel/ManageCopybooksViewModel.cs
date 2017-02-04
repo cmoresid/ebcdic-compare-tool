@@ -91,7 +91,10 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
             get { return _selectedNewEbcdicFile; }
             set
             {
-                _selectedNewEbcdicFile = value;
+                _selectedNewEbcdicFile = value != null
+                    ? System.IO.Path.GetFileName(value)
+                    : null;
+
                 OnPropertyChanged("SelectedNewEbcdicFile");
             }
         }
@@ -265,11 +268,7 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 
         private void OnSelectNewEbcdicFile()
         {
-            var ebcdicFilePath = _fileDialogInteraction.OpenFileDialog("Select New EBCDIC file");
-
-            SelectedNewEbcdicFile = ebcdicFilePath != null
-                ? System.IO.Path.GetFileName(ebcdicFilePath)
-                : null;
+            SelectedNewEbcdicFile = _fileDialogInteraction.OpenFileDialog("Select New EBCDIC file");
         }
 
         #endregion
