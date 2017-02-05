@@ -65,9 +65,10 @@ namespace CodeMovement.EbcdicCompare.Services
             try
             {
                 var fileName = Path.GetFileName(fromPath);
-                var newToPath = Path.Combine(toPath, fileName);
+                var newToPath = Path.GetFullPath(Path.Combine(toPath, fileName));
 
-                _fileOperation.Copy(fromPath, newToPath, true);
+                if (fromPath != newToPath)
+                    _fileOperation.Copy(fromPath, newToPath, true);
 
                 result.Result = newToPath;
             }

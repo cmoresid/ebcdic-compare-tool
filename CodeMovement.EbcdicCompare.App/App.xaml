@@ -1,7 +1,8 @@
 ﻿<Application x:Class="CodeMovement.EbcdicCompare.App.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:CodeMovement.EbcdicCompare.App">
+             xmlns:local="clr-namespace:CodeMovement.EbcdicCompare.App"
+             Exit="Application_Exit">
     <Application.Resources>
         <Style x:Key="LinkButton" TargetType="Button" BasedOn="{StaticResource ResourceKey={x:Type Button}}">
             <Setter Property="Width" Value="Auto"/>

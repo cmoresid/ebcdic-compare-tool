@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace CodeMovement.EbcdicCompare.App
 {
@@ -17,6 +11,12 @@ namespace CodeMovement.EbcdicCompare.App
         {
             var bootstrapper = new Bootstrapper();
             bootstrapper.Run();
+        }
+
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            // Ensure that all SQLiteConnections are closed.
+            System.Data.SQLite.SQLiteConnection.ClearAllPools();
         }
     }
 }
