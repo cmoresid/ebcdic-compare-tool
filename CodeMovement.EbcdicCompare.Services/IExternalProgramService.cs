@@ -1,7 +1,9 @@
-﻿namespace CodeMovement.EbcdicCompare.Services
+﻿using CodeMovement.EbcdicCompare.Models.Result;
+
+namespace CodeMovement.EbcdicCompare.Services
 {
     public interface IExternalProgramService
     {
-        void RunProgram(string programName, params object[] args);
+        OperationResult<bool> RunProgram(string programName, params object[] args);
     }
 }

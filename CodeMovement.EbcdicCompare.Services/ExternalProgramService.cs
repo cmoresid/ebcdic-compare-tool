@@ -1,26 +1,39 @@
-﻿using System.Diagnostics;
+﻿using CodeMovement.EbcdicCompare.Models.Result;
+using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace CodeMovement.EbcdicCompare.Services
 {
     public class ExternalProgramService : IExternalProgramService
     {
-        public void RunProgram(string programName, params object[] args)
+        public OperationResult<bool> RunProgram(string programName, params object[] args)
         {
-            string arguments = args.Aggregate("", (argStr, arg) => argStr + " " + arg.ToString());
+            OperationResult<bool> result = OperationResult<bool>.CreateResult(true);
 
-            var externalProcess = new Process
+            try
             {
-                StartInfo =
-                {
-                    FileName = programName,
-                    Arguments = arguments,
-                    UseShellExecute = false,
-                    WindowStyle = ProcessWindowStyle.Normal
-                }
-            };
+                var arguments = args.Aggregate("", (argStr, arg) => argStr + " " + arg.ToString());
 
-            externalProcess.Start();
+                var externalProcess = new Process
+                {
+                    StartInfo =
+                    {
+                        FileName = programName,
+                        Arguments = arguments,
+                        UseShellExecute = false,
+                        WindowStyle = ProcessWindowStyle.Normal
+                    }
+                };
+
+                externalProcess.Start();
+            }
+            catch (Exception ex)
+            {
+                result.AddMessage(ex.Message);
+            }
+
+            return result;
         }
     }
 }

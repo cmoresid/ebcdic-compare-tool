@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Prism.Commands;
-using Prism.Events;
-using Prism.Interactivity.InteractionRequest;
-using Prism.Regions;
+﻿using CodeMovement.EbcdicCompare.DataAccess;
 using CodeMovement.EbcdicCompare.Models;
 using CodeMovement.EbcdicCompare.Models.Constant;
 using CodeMovement.EbcdicCompare.Models.Request;
 using CodeMovement.EbcdicCompare.Models.Result;
-using CodeMovement.EbcdicCompare.Services;
+using CodeMovement.EbcdicCompare.Models.ViewModel;
 using CodeMovement.EbcdicCompare.Presentation.Event;
 using CodeMovement.EbcdicCompare.Presentation.Interaction;
+using CodeMovement.EbcdicCompare.Services;
+using Prism.Commands;
+using Prism.Events;
+using Prism.Interactivity.InteractionRequest;
+using Prism.Regions;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using CodeMovement.EbcdicCompare.Models.ViewModel;
-using CodeMovement.EbcdicCompare.DataAccess;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 {
@@ -220,10 +220,20 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 
         private void OnOpenExternalEditor()
         {
-            _externalProgramService.RunProgram(_configurationSettings.ExternalEditorPath, 
+            var openLegacyFileResult = _externalProgramService.RunProgram(_configurationSettings.ExternalEditorPath, 
                 string.Format("\"{0}\"", LegacyEbcdicFilePath));
-            _externalProgramService.RunProgram(_configurationSettings.ExternalEditorPath, 
+            var openModernizedFileResult = _externalProgramService.RunProgram(_configurationSettings.ExternalEditorPath, 
                 string.Format("\"{0}\"", ModernizedEbcdicFilePath));
+
+            if (!openLegacyFileResult.Successful || !openModernizedFileResult.Successful)
+            {
+                ErrorConfirmationRequest.Raise(new Notification
+                {
+                    Title = "Oops! Something went wrong!",
+                    Content = string.Format("Cannot open EBCDIC files in external editor.\n\nCannot find editor:\n{0}", 
+                        _configurationSettings.ExternalEditorPath)
+                });
+            }
 
             OnResetView();
         }
