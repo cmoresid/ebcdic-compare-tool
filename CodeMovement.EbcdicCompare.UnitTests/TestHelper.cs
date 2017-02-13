@@ -19,6 +19,7 @@ namespace CodeMovement.EbcdicCompare.UnitTests
             ViewEbcdicFileRequestEventMock viewFileEvent = null,
             CompareEbcdicFilesRequestEventMock compareEvent = null,
             FilterEbcdicRecordsEventMock filterEvent = null,
+            SortEbcdicRecordsEventMock sortEvent = null,
             UpdateEbcdicFileGridEventMock updateEvent = null)
         {
             var eventAggregatorMock = MockRepository.GenerateMock<IEventAggregator>();
@@ -28,6 +29,7 @@ namespace CodeMovement.EbcdicCompare.UnitTests
             compareEvent = compareEvent ?? new CompareEbcdicFilesRequestEventMock();
             filterEvent = filterEvent ?? new FilterEbcdicRecordsEventMock();
             updateEvent = updateEvent ?? new UpdateEbcdicFileGridEventMock();
+            sortEvent = sortEvent ?? new SortEbcdicRecordsEventMock();
 
             eventAggregatorMock.Expect(m => m.GetEvent<FinishReadEbcdicFileEvent>())
                     .Return(finishReadEvent).Repeat.Any();
@@ -43,6 +45,9 @@ namespace CodeMovement.EbcdicCompare.UnitTests
 
             eventAggregatorMock.Expect(m => m.GetEvent<UpdateEbcdicFileGridEvent>())
                .Return(updateEvent).Repeat.Any();
+
+            eventAggregatorMock.Expect(m => m.GetEvent<SortEbcdicRecordsEvent>())
+                .Return(sortEvent).Repeat.Any();
 
             return eventAggregatorMock;
         }

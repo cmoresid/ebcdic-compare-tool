@@ -1,4 +1,6 @@
-﻿namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
+﻿using CodeMovement.EbcdicCompare.Models.Result;
+
+namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 {
     public partial class CompareEbcdicFilesViewModel
     {
@@ -38,8 +40,10 @@
         private bool _showSelectCopybookRow;
         private bool _showCopybookCompareButtonRow;
         private bool _showCopybookCompareIndicator;
+        private bool _showCompareAndSortCheckbox;
         private bool _finishedCompare;
         private bool _filterByRecordDifferences;
+        private bool _sortAndCompareRecords;
 
         private States _currentState;
 
@@ -95,6 +99,12 @@
             set { SetProperty(ref _showCopybookCompareIndicator, value); }
         }
 
+        public bool ShowCompareAndSortCheckbox
+        {
+            get { return _showCompareAndSortCheckbox; }
+            set { SetProperty(ref _showCompareAndSortCheckbox, value); }
+        }
+
         public bool FinishedCompare
         {
             get { return _finishedCompare; }
@@ -123,6 +133,8 @@
                     ShowFilesMatchLabel = false;
                     ShowInitialCompareIndicator = false;
                     ShowOpenFilesInExternalEditorRow = false;
+                    ShowCompareAndSortCheckbox = false;
+                    SortAndCompareRecords = false;
                     FinishedCompare = false;
                     FilterByRecordDifferences = false;
                     break;
@@ -168,8 +180,18 @@
                 case States.FinishedCopybookCompare:
                     ShowCopybookCompareIndicator = false;
                     FinishedCompare = true;
+                    ShowCompareAndSortCheckbox = ShouldShowCompareAndSortCheckbox(CompareEbcdicFileResult);
                     break;
             }
+        }
+
+        #endregion
+
+        #region "Private State Helper Methods"
+
+        private static bool ShouldShowCompareAndSortCheckbox(CompareEbcdicFileResult result)
+        {
+            return result.FirstEbcdicFile?.EbcdicFileRecords.Count == result.SecondEbcdicFile?.EbcdicFileRecords.Count;
         }
 
         #endregion

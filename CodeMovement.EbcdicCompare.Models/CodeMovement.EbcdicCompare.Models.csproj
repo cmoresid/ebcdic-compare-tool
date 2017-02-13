@@ -93,6 +93,7 @@
     <Compile Include="RecordFlag.cs" />
     <Compile Include="Request\CompareEbcdicFilesRequest.cs" />
     <Compile Include="Request\FilterEbcdicRecordsRequest.cs" />
+    <Compile Include="Request\SortEbcdicRecordsRequest.cs" />
     <Compile Include="Request\ViewEbcdicFileRequest.cs" />
     <Compile Include="Result\CompareEbcdicFileResult.cs" />
     <Compile Include="Result\EbcdicFileAnalysis.cs" />

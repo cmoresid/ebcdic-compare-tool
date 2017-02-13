@@ -33,12 +33,15 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Controllers
         {
             var viewEvent = new ViewEbcdicFileRequestEventMock();
             var compareEvent = new CompareEbcdicFilesRequestEventMock();
-            var eventAggregator = TestHelper.CreateEventAggregator(viewFileEvent: viewEvent, compareEvent: compareEvent);
+            var sortEvent = new SortEbcdicRecordsEventMock();
+
+            var eventAggregator = TestHelper.CreateEventAggregator(viewFileEvent: viewEvent, compareEvent: compareEvent, sortEvent: sortEvent);
 
             var controller = new EbcdicFileContentRegionController(eventAggregator, CompareEbcdicFilesService);
 
             Assert.IsNotNull(viewEvent.Callback);
             Assert.IsNotNull(compareEvent.Callback);
+            Assert.IsNotNull(sortEvent.Callback);
         }
 
         [TestMethod]
@@ -148,6 +151,59 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Controllers
 
             Assert.AreEqual(10, firstGridView.VisibleEbcdicFileRecords.Count);
             Assert.AreEqual(2, secondGridView.AllEbcdicFileRecordModels.Count);
+        }
+
+        [TestMethod]
+        public void Does_EbcdicFileContentRegionController_Sort_Records_Successfully()
+        {
+            CompareEbcdicFileResult compareResults = null;
+            bool firstComparePerformed = false;
+
+            Action<FinishReadEbcdicFile> finishEventAssertions = (result) =>
+            {
+                if (!firstComparePerformed)
+                {
+                    compareResults = result.CompareEbcdicFileResult;
+                    firstComparePerformed = true;
+                }
+                else
+                {
+                    Assert.IsNotNull(result.CompareEbcdicFileResult);
+                }
+            };
+
+            var finishEvent = new FinishReadEbcdicFileEventMock();
+            finishEvent.Subscribe(finishEventAssertions, ThreadOption.UIThread, false, null);
+
+            var compareEvent = new CompareEbcdicFilesRequestEventMock();
+            var sortEvent = new SortEbcdicRecordsEventMock();
+            var updateEvent = new UpdateEbcdicFileGridEventMock();
+            var eventAggregator = TestHelper.CreateEventAggregator(compareEvent: compareEvent,
+                updateEvent: updateEvent,
+                finishReadEvent: finishEvent);
+
+            var firstGridView = new EbcdicFileGridViewModel(eventAggregator);
+            firstGridView.RegionName = RegionNames.FirstEbcdicFileContentRegion;
+
+            var secondGridView = new EbcdicFileGridViewModel(eventAggregator);
+            secondGridView.RegionName = RegionNames.SecondEbcdicFileContentRegion;
+
+            var controller = new EbcdicFileContentRegionController(eventAggregator, CompareEbcdicFilesService);
+
+            compareEvent.Publish(new CompareEbcdicFilesRequest
+            {
+                FirstEbcdicFilePath = Path.Combine(TestHelper.EbcdicFiles, "SortPersonA.txt"),
+                SecondEbcdicFilePath = Path.Combine(TestHelper.EbcdicFiles, "SortPersonB_B.txt"),
+                CopybookFilePath = Path.Combine(TestHelper.Copybooks, "Person.fileformat")
+            });
+
+            Assert.IsNotNull(compareResults);
+
+            sortEvent.Publish(new SortEbcdicRecordsRequest
+            {
+                CompareResult = compareResults,
+                SortEbcdicFileRecords = true
+            });
         }
     }
 }

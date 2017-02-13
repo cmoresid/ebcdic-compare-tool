@@ -26,6 +26,18 @@ namespace CodeMovement.EbcdicCompare.Models.ViewModel
             Flag = RecordFlag.None;
         }
 
+        /// <summary>
+        /// This constructor should only be used when unit testing.
+        /// </summary>
+        public EbcdicFileRecordModel()
+        {
+            ColumnHeading = string.Empty;
+            RecordTypeName = string.Empty;
+            RowValue = string.Empty;
+            RowNumber = -1;
+            Flag = RecordFlag.None;
+        }
+
         public int RowNumber { get; set; }
         public RecordFlag Flag { get; set; }
         public string RecordTypeName { get; set; }

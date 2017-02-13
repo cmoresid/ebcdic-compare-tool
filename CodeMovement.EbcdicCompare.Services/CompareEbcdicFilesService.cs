@@ -76,7 +76,34 @@ namespace CodeMovement.EbcdicCompare.Services
             return result;
         }
 
+        public OperationResult<CompareEbcdicFileResult> SortCompareEbcdicResults(CompareEbcdicFileResult compareResults, bool sort = true)
+        {
+            if (compareResults == null)
+                return CreateResult(new ObservableCollection<EbcdicFileRecordModel>(), new ObservableCollection<EbcdicFileRecordModel>(), null);
+
+            var firstEbcdicFileRecords = compareResults.FirstEbcdicFile.EbcdicFileRecords;
+            var secondEbcdicFileRecords = compareResults.SecondEbcdicFile.EbcdicFileRecords;
+
+            if (firstEbcdicFileRecords.Count != secondEbcdicFileRecords.Count)
+                return OperationResult<CompareEbcdicFileResult>.CreateResult(compareResults, 
+                    "In order to perform a sort and compare, the legacy file and modernized file must have the same number of records.");
+
+            var firstEbcdicFileRecordsSorted = CreateEbcdicFileRecordModelList(
+                new ObservableCollection<EbcdicFileRecordModel>(firstEbcdicFileRecords.OrderBy(x => sort ? x.RowValue : x.RowNumber.ToString())));
+            var secondEbcdicFileRecordsSorted = CreateEbcdicFileRecordModelList(
+                new ObservableCollection<EbcdicFileRecordModel>(secondEbcdicFileRecords.OrderBy(x => sort ? x.RowValue : x.RowNumber.ToString())));
+
+            SetRecordFlags(firstEbcdicFileRecordsSorted, secondEbcdicFileRecordsSorted);
+
+            return CalculateRecordStatistics(firstEbcdicFileRecordsSorted, secondEbcdicFileRecordsSorted);
+        }
+
         #region "Private Helpers"
+
+        private static OperationResult<ObservableCollection<EbcdicFileRecordModel>> CreateEbcdicFileRecordModelList(ObservableCollection<EbcdicFileRecordModel> list)
+        {
+            return OperationResult<ObservableCollection<EbcdicFileRecordModel>>.CreateResult(list);
+        }
 
         private static OperationResult<CompareEbcdicFileResult> CalculateRecordStatistics(OperationResult<ObservableCollection<EbcdicFileRecordModel>> firstFileRecordsResult,
             OperationResult<ObservableCollection<EbcdicFileRecordModel>> secondFileRecordsResult)

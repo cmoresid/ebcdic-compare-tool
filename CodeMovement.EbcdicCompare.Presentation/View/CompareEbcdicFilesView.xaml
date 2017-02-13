@@ -121,8 +121,11 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="25" />
                     <RowDefinition Height="{Binding FinishedCompare, 
-                    Converter={StaticResource BoolToGridRowHeightConverter},
-                    ConverterParameter=25}" />
+                        Converter={StaticResource BoolToGridRowHeightConverter},
+                        ConverterParameter=25}" />
+                    <RowDefinition Height="{Binding ShowCompareAndSortCheckbox,
+                        Converter={StaticResource BoolToGridRowHeightConverter},
+                        ConverterParameter=25}" />
                 </Grid.RowDefinitions>
 
                 <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left"
@@ -142,6 +145,11 @@
                           FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Center" 
                           Margin="7,0,0,0"
                           IsChecked="{Binding FilterByRecordDifferences}">Show Differences Only</CheckBox>
+
+                <CheckBox Grid.Row="4" Grid.Column="0"
+                          FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                          Margin="7,0,0,0"
+                          IsChecked="{Binding SortAndCompareRecords}">Sort Records</CheckBox>
             </Grid>
         </Grid>
     </Grid>

@@ -14,6 +14,7 @@ namespace CodeMovement.EbcdicCompare.Presentation.Controller
         private readonly ICompareEbcdicFilesService _compareEbcdicFilesService;
         private readonly IEventAggregator _eventAggregator;
         private readonly UpdateEbcdicFileGridEvent _updateGridEvent;
+        private readonly FinishReadEbcdicFileEvent _finishReadEbcdicFileEvent;
 
         public EbcdicFileContentRegionController(
             IEventAggregator eventAggregator,
@@ -23,15 +24,38 @@ namespace CodeMovement.EbcdicCompare.Presentation.Controller
             _eventAggregator = eventAggregator;
 
             _updateGridEvent = _eventAggregator.GetEvent<UpdateEbcdicFileGridEvent>();
+            _finishReadEbcdicFileEvent = eventAggregator.GetEvent<FinishReadEbcdicFileEvent>();
 
             _eventAggregator.GetEvent<ViewEbcdicFileRequestEvent>().Subscribe(OnViewEbcdicFile,
                 ThreadOption.BackgroundThread, true, null);
 
             _eventAggregator.GetEvent<CompareEbcdicFilesRequestEvent>().Subscribe(OnCompareEbcdicFiles,
                 ThreadOption.BackgroundThread, true);
+
+            _eventAggregator.GetEvent<SortEbcdicRecordsEvent>().Subscribe(OnSortAndCompareRecords,
+                ThreadOption.BackgroundThread, true, null);
         }
 
         #region "Event Handlers"
+
+        private void OnSortAndCompareRecords(SortEbcdicRecordsRequest sortRequest)
+        {
+            var finishReadEbcdicFile = new FinishReadEbcdicFile
+            {
+                EventType = ReadEbcdicFileEventType.CompareEbcdicFiles
+            };
+
+            var comparisonResults = _compareEbcdicFilesService.SortCompareEbcdicResults(
+                sortRequest.CompareResult, sortRequest.SortEbcdicFileRecords);
+
+            UpdateEbcdicFileGrid(RegionNames.FirstEbcdicFileContentRegion,
+                comparisonResults.Result.FirstEbcdicFile.EbcdicFileRecords);
+            UpdateEbcdicFileGrid(RegionNames.SecondEbcdicFileContentRegion,
+                comparisonResults.Result.SecondEbcdicFile.EbcdicFileRecords);
+
+            finishReadEbcdicFile.CompareEbcdicFileResult = comparisonResults.Result;
+            _finishReadEbcdicFileEvent.Publish(finishReadEbcdicFile);
+        }
 
         private void OnViewEbcdicFile(ViewEbcdicFileRequest request)
         {
@@ -64,12 +88,11 @@ namespace CodeMovement.EbcdicCompare.Presentation.Controller
 
             // Notify the view of any errors that occurred during the reading of the
             // EBCDIC file
-            _eventAggregator.GetEvent<FinishReadEbcdicFileEvent>().Publish(finishReadEbcdicFile);
+            _finishReadEbcdicFileEvent.Publish(finishReadEbcdicFile);
         }
 
         private void OnCompareEbcdicFiles(CompareEbcdicFilesRequest request)
         {
-            var finishedReadingEvent = _eventAggregator.GetEvent<FinishReadEbcdicFileEvent>();
             var finishReadEbcdicFile = new FinishReadEbcdicFile
             {
                 EventType = ReadEbcdicFileEventType.CompareEbcdicFiles
@@ -91,7 +114,7 @@ namespace CodeMovement.EbcdicCompare.Presentation.Controller
                 comparisonResults.Result.SecondEbcdicFile.EbcdicFileRecords);
 
             finishReadEbcdicFile.CompareEbcdicFileResult = comparisonResults.Result;
-            finishedReadingEvent.Publish(finishReadEbcdicFile);
+            _finishReadEbcdicFileEvent.Publish(finishReadEbcdicFile);
         }
 
         #endregion

@@ -1,11 +1,16 @@
 ﻿using CodeMovement.EbcdicCompare.Models.Constant;
+using CodeMovement.EbcdicCompare.Models.Ebcdic;
+using CodeMovement.EbcdicCompare.Models.Request;
 using CodeMovement.EbcdicCompare.Models.Result;
+using CodeMovement.EbcdicCompare.Models.ViewModel;
 using CodeMovement.EbcdicCompare.Presentation.ViewModel;
 using CodeMovement.EbcdicCompare.UnitTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prism.Events;
 using Rhino.Mocks;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace CodeMovement.EbcdicCompare.Tests.ViewModels
@@ -283,6 +288,123 @@ namespace CodeMovement.EbcdicCompare.Tests.ViewModels
 
             // Ensure that external program option is shown.
             Assert.AreEqual(CompareEbcdicFilesViewModel.States.FinishedCopybookCompare, viewModel.CurrentState);
+        }
+
+        [TestMethod]
+        public void CompareEbcdicFilesViewModel_Should_Send_Sort_Event_When_Checkbox_Is_Clicked()
+        {
+            bool wasSortEventPublished = false;
+
+            var finishEvent = new FinishReadEbcdicFileEventMock();
+            var sortEvent = new SortEbcdicRecordsEventMock();
+            sortEvent.Callback = (e) =>
+            {
+                Assert.IsTrue(e.SortEbcdicFileRecords);
+                wasSortEventPublished = true;
+            };
+
+            var eventAggregator = TestHelper.CreateEventAggregator(finishReadEvent: finishEvent, sortEvent: sortEvent);
+
+            var viewModel = new CompareEbcdicFilesViewModel(eventAggregator, TestHelper.RegionManagerMock,
+                TestHelper.FileDialogInteractionMock, TestHelper.CompareEbcdicFilesServiceMock,
+                TestHelper.CopybookManagerMock, TestHelper.ConfigurationSettingsMock, TestHelper.ExternalProgramServiceMock);
+
+            viewModel.SortAndCompareRecords = true;
+
+            Assert.IsTrue(wasSortEventPublished);
+        }
+
+        [TestMethod]
+        public void CompareEbcdicFilesViewModel_Should_Show_Sort_Checkbox()
+        {
+            const string file1 = @"C:\FILE1.txt";
+            const string file2 = @"C:\FILE2.txt";
+            const string copybook = @"C:\Copybook.fileformat";
+
+            var finishEvent = new FinishReadEbcdicFileEventMock();
+            var sortEvent = new SortEbcdicRecordsEventMock();
+
+            var eventAggregator = TestHelper.CreateEventAggregator(finishReadEvent: finishEvent, sortEvent: sortEvent);
+
+            var viewModel = new CompareEbcdicFilesViewModel(eventAggregator, TestHelper.RegionManagerMock,
+                TestHelper.FileDialogInteractionMock, TestHelper.CompareEbcdicFilesServiceMock,
+                TestHelper.CopybookManagerMock, TestHelper.ConfigurationSettingsMock, TestHelper.ExternalProgramServiceMock);
+
+            // Set state to ready perform copybook compare
+            viewModel.LegacyEbcdicFilePath = file1;
+            viewModel.ModernizedEbcdicFilePath = file2;
+            viewModel.CopybookFilePath = copybook;
+            viewModel.CurrentState = CompareEbcdicFilesViewModel.States.ReadyToPerformCopybookCompare;
+
+            viewModel.PerformCopybookCompare.Execute();
+
+            finishEvent.Publish(new FinishReadEbcdicFile
+            {
+                EventType = ReadEbcdicFileEventType.CompareEbcdicFiles,
+                CompareEbcdicFileResult = new CompareEbcdicFileResult
+                {
+                    FirstEbcdicFile = new EbcdicFileAnalysis
+                    {
+                        EbcdicFileRecords = new ObservableCollection<EbcdicFileRecordModel>()
+                    },
+                    SecondEbcdicFile = new EbcdicFileAnalysis
+                    {
+                        EbcdicFileRecords = new ObservableCollection<EbcdicFileRecordModel>()
+                    }
+                }
+            });
+
+            Assert.IsTrue(viewModel.ShowCompareAndSortCheckbox);
+        }
+
+        [TestMethod]
+        public void CompareEbcdicFilesViewModel_Should_Not_Show_Sort_Checkbox()
+        {
+            const string file1 = @"C:\FILE1.txt";
+            const string file2 = @"C:\FILE2.txt";
+            const string copybook = @"C:\Copybook.fileformat";
+
+            var finishEvent = new FinishReadEbcdicFileEventMock();
+            var sortEvent = new SortEbcdicRecordsEventMock();
+
+            var eventAggregator = TestHelper.CreateEventAggregator(finishReadEvent: finishEvent, sortEvent: sortEvent);
+
+            var viewModel = new CompareEbcdicFilesViewModel(eventAggregator, TestHelper.RegionManagerMock,
+                TestHelper.FileDialogInteractionMock, TestHelper.CompareEbcdicFilesServiceMock,
+                TestHelper.CopybookManagerMock, TestHelper.ConfigurationSettingsMock, TestHelper.ExternalProgramServiceMock);
+
+            // Set state to ready perform copybook compare
+            viewModel.LegacyEbcdicFilePath = file1;
+            viewModel.ModernizedEbcdicFilePath = file2;
+            viewModel.CopybookFilePath = copybook;
+            viewModel.CurrentState = CompareEbcdicFilesViewModel.States.ReadyToPerformCopybookCompare;
+
+            viewModel.PerformCopybookCompare.Execute();
+
+            finishEvent.Publish(new FinishReadEbcdicFile
+            {
+                EventType = ReadEbcdicFileEventType.CompareEbcdicFiles,
+                CompareEbcdicFileResult = new CompareEbcdicFileResult
+                {
+                    FirstEbcdicFile = new EbcdicFileAnalysis
+                    {
+                        EbcdicFileRecords = new ObservableCollection<EbcdicFileRecordModel>(new List<EbcdicFileRecordModel>
+                        {
+                            new EbcdicFileRecordModel()
+                        })
+                    },
+                    SecondEbcdicFile = new EbcdicFileAnalysis
+                    {
+                        EbcdicFileRecords = new ObservableCollection<EbcdicFileRecordModel>(new List<EbcdicFileRecordModel>
+                        {
+                            new EbcdicFileRecordModel(),
+                            new EbcdicFileRecordModel()
+                        })
+                    }
+                }
+            });
+
+            Assert.IsFalse(viewModel.ShowCompareAndSortCheckbox);
         }
     }
 }

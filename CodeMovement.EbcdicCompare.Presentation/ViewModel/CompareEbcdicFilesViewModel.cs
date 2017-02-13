@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System;
 
 namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 {
@@ -133,6 +134,18 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
                 OnPropertyChanged("FilterByRecordDifferences");
 
                 OnShowOnlyRecordDifferences();
+            }
+        }
+
+        public bool SortAndCompareRecords
+        {
+            get { return _sortAndCompareRecords; }
+            set
+            {
+                _sortAndCompareRecords = value;
+                OnPropertyChanged("SortAndCompareRecords");
+
+                OnSortAndOrderRecords();
             }
         }
 
@@ -276,8 +289,6 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
 
         private void OnCompareEbcdicFilesComplete(FinishReadEbcdicFile results)
         {
-            CurrentState = States.FinishedCopybookCompare;
-
             if (!string.IsNullOrEmpty(results.ErrorMessage))
             {
                 ErrorConfirmationRequest.Raise(
@@ -287,6 +298,8 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
             {
                 CompareEbcdicFileResult = results.CompareEbcdicFileResult;
             }
+
+            CurrentState = States.FinishedCopybookCompare;
         }
 
         private void OnShowOnlyRecordDifferences()
@@ -305,6 +318,15 @@ namespace CodeMovement.EbcdicCompare.Presentation.ViewModel
             {
                 FilterBy = filterCriteria,
                 RegionName = RegionNames.SecondEbcdicFileContentRegion
+            });
+        }
+
+        private void OnSortAndOrderRecords()
+        {
+            EventAggregator.GetEvent<SortEbcdicRecordsEvent>().Publish(new SortEbcdicRecordsRequest
+            {
+                SortEbcdicFileRecords = SortAndCompareRecords,
+                CompareResult = CompareEbcdicFileResult
             });
         }
 

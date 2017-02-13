@@ -3,6 +3,7 @@ using CodeMovement.EbcdicCompare.DataAccess;
 using CodeMovement.EbcdicCompare.Services;
 using Rhino.Mocks;
 using System.IO;
+using System.Linq;
 using CodeMovement.EbcdicCompare.Models.Request;
 using CodeMovement.EbcdicCompare.Models;
 
@@ -287,5 +288,124 @@ namespace CodeMovement.EbcdicCompare.Tests.Services
             Assert.AreEqual("          ^^^^^^ ^          ^ ", file1Records[1].Differences);
             Assert.AreEqual("          ^^^^^^ ^          ^ ", file2Records[1].Differences);
         }
+
+        [TestMethod]
+        public void EbcdicCompareService_Compare_And_Sort_Same_Length()
+        {
+            var file1 = Path.Combine(EbcdicFiles, "SortPerson_A.txt");
+            var file2 = Path.Combine(EbcdicFiles, "SortPerson_B.txt");
+            var copybook = Path.Combine(Copybooks, "Person.fileformat");
+
+            var compareEbcdicFilesService = CompareEbcdicFilesService;
+
+            var result = compareEbcdicFilesService.Compare(new CompareEbcdicFilesRequest
+            {
+                FirstEbcdicFilePath = file1,
+                SecondEbcdicFilePath = file2,
+                CopybookFilePath = copybook
+            });
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Successful);
+            Assert.IsNotNull(result.Result);
+
+            var file1Records = result.Result.FirstEbcdicFile.EbcdicFileRecords;
+            var file2Records = result.Result.SecondEbcdicFile.EbcdicFileRecords;
+
+            // Assert that there are differences between the files.
+            Assert.IsTrue(file1Records.Any(record => !string.IsNullOrWhiteSpace(record.Differences)));
+            Assert.IsTrue(file1Records.Any(record => record.ShowDifferences));
+
+            Assert.IsTrue(file2Records.Any(record => !string.IsNullOrWhiteSpace(record.Differences)));
+            Assert.IsTrue(file2Records.Any(record => record.ShowDifferences));
+
+            // Now sort the results based on row value.
+            var sortedResult = compareEbcdicFilesService.SortCompareEbcdicResults(result.Result);
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Successful);
+            Assert.IsNotNull(result.Result);
+
+            var compareResults = sortedResult.Result;
+            file1Records = compareResults.FirstEbcdicFile.EbcdicFileRecords;
+            file2Records = compareResults.SecondEbcdicFile.EbcdicFileRecords;
+
+            // There should have been the same contents in the files, just in a different
+            // order.
+            Assert.IsTrue(file1Records.All(record => string.IsNullOrWhiteSpace(record.Differences)));
+            Assert.IsTrue(file1Records.All(record => !record.ShowDifferences));
+
+            Assert.IsTrue(file2Records.All(record => string.IsNullOrWhiteSpace(record.Differences)));
+            Assert.IsTrue(file2Records.All(record => !record.ShowDifferences));
+        }
+
+        [TestMethod]
+        public void EbcdicCompareService_Compare_And_Sort_Different_Length()
+        {
+            var file1 = Path.Combine(EbcdicFiles, "Person.txt");
+            var file2 = Path.Combine(EbcdicFiles, "Person2.txt");
+            var copybook = Path.Combine(Copybooks, "Person.fileformat");
+
+            var compareEbcdicFilesService = CompareEbcdicFilesService;
+
+            var result = compareEbcdicFilesService.Compare(new CompareEbcdicFilesRequest
+            {
+                FirstEbcdicFilePath = file1,
+                SecondEbcdicFilePath = file2,
+                CopybookFilePath = copybook
+            });
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Successful);
+            Assert.IsNotNull(result.Result);
+
+            // Now sort the results based on row value.
+            var sortedResult = compareEbcdicFilesService.SortCompareEbcdicResults(result.Result);
+
+            Assert.IsNotNull(sortedResult);
+            Assert.IsFalse(sortedResult.Successful);
+            Assert.AreEqual(1, sortedResult.Messages.Count);
+        }
+
+        [TestMethod]
+        public void EbcdicCompareService_Compare_And_Sort_Then_Unsort()
+        {
+            var file1 = Path.Combine(EbcdicFiles, "SortPerson_A.txt");
+            var file2 = Path.Combine(EbcdicFiles, "SortPerson_B.txt");
+            var copybook = Path.Combine(Copybooks, "Person.fileformat");
+
+            var compareEbcdicFilesService = CompareEbcdicFilesService;
+
+            var result = compareEbcdicFilesService.Compare(new CompareEbcdicFilesRequest
+            {
+                FirstEbcdicFilePath = file1,
+                SecondEbcdicFilePath = file2,
+                CopybookFilePath = copybook
+            });
+
+            Assert.IsNotNull(result);
+
+            var file1Result = result.Result.FirstEbcdicFile;
+            var file2Result = result.Result.SecondEbcdicFile;
+
+            var sortedResult = compareEbcdicFilesService.SortCompareEbcdicResults(result.Result);
+            Assert.IsNotNull(sortedResult);
+
+            var originalSortOrder = compareEbcdicFilesService.SortCompareEbcdicResults(sortedResult.Result, false);
+            Assert.IsNotNull(originalSortOrder);
+
+            var originalFile1Result = originalSortOrder.Result.FirstEbcdicFile;
+            var originalFile2Result = originalSortOrder.Result.SecondEbcdicFile;
+
+            Assert.AreEqual(1, originalFile1Result.EbcdicFileRecords[0].RowNumber);
+            Assert.AreEqual(2, originalFile1Result.EbcdicFileRecords[1].RowNumber);
+            Assert.AreEqual(3, originalFile1Result.EbcdicFileRecords[2].RowNumber);
+
+            Assert.AreEqual(file1Result.EbcdicFileRecords[0], originalFile1Result.EbcdicFileRecords[0]);
+            Assert.AreEqual(file1Result.EbcdicFileRecords[1], originalFile1Result.EbcdicFileRecords[1]);
+            Assert.AreEqual(file1Result.EbcdicFileRecords[2], originalFile1Result.EbcdicFileRecords[2]);
+        }
+
+
     }
 }

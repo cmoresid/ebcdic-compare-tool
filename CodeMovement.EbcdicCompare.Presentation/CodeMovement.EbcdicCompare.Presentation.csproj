@@ -95,6 +95,7 @@
     <Compile Include="Event\FilterEbcdicRecordsEvent.cs" />
     <Compile Include="Event\FinishCompareEbcdicFilesEvent.cs" />
     <Compile Include="Event\FinishReadEbcdicFileEvent.cs" />
+    <Compile Include="Event\SortEbcdicRecordsEvent.cs" />
     <Compile Include="Event\UpdateEbcdicFileGridEvent.cs" />
     <Compile Include="Event\ViewEbcdicFileRequestEvent.cs" />
     <Compile Include="Event\WindowResizeEvent.cs" />

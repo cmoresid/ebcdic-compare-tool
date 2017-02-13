@@ -106,11 +106,25 @@ namespace CodeMovement.EbcdicCompare.Tests
             return new SubscriptionToken((e) => { });
         }
 
-        internal void Subscribe(bool v)
+        public Dictionary<Predicate<UpdateEbcdicFileGridResult>, Action<UpdateEbcdicFileGridResult>> Mapping { get; private set; }
+    }
+
+    public class SortEbcdicRecordsEventMock : SortEbcdicRecordsEvent
+    {
+        public override void Publish(SortEbcdicRecordsRequest payload)
         {
-            throw new NotImplementedException();
+            ReceivedPayload = payload;
+            Callback?.Invoke(payload);
         }
 
-        public Dictionary<Predicate<UpdateEbcdicFileGridResult>, Action<UpdateEbcdicFileGridResult>> Mapping { get; private set; }
+        public override SubscriptionToken Subscribe(Action<SortEbcdicRecordsRequest> action, ThreadOption threadOption, bool keepSubscriberReferenceAlive, Predicate<SortEbcdicRecordsRequest> filter)
+        {
+            Callback = action;
+            return new SubscriptionToken(e => { });
+        }
+
+        public SortEbcdicRecordsRequest ReceivedPayload { get; private set; }
+
+        public Action<SortEbcdicRecordsRequest> Callback { get; set; }
     }
 }

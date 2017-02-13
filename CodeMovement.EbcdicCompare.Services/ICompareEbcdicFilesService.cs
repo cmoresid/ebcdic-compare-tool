@@ -7,5 +7,6 @@ namespace CodeMovement.EbcdicCompare.Services
     {
         OperationResult<CompareEbcdicFileResult> Compare(CompareEbcdicFilesRequest request);
         OperationResult<CompareEbcdicFileResult> CompareEbcdicByteContents(string ebcdicFilePath1, string ebcdicFilePath2);
+        OperationResult<CompareEbcdicFileResult> SortCompareEbcdicResults(CompareEbcdicFileResult compareResults, bool sort = true);
     }
 }
