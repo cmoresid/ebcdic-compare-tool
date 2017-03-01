@@ -1,4 +1,4 @@
-# ebcdic-compare-tool [![Build status](https://ci.appveyor.com/api/projects/status/snsicw8e2v06x3uh/branch/master?svg=true)](https://ci.appveyor.com/project/cmoresid/ebcdic-compare-tool/branch/master)  [![Quality Gate](https://sonarqube.com/api/badges/gate?key=ebcdic-compare-tool)](https://sonarqube.com/dashboard/index/ebcdic-compare-tool)  
+# ebcdic-compare-tool [![Build status](https://ci.appveyor.com/api/projects/status/snsicw8e2v06x3uh/branch/master?svg=true)](https://ci.appveyor.com/project/cmoresid/ebcdic-compare-tool/branch/master)  [![Quality Gate](https://sonarqube.com/api/badges/gate?key=ebcdic-compare-tool)](https://sonarqube.com/dashboard/index/ebcdic-compare-tool) [![Code Coverage](https://sonarqube.com/api/badges/measure?key=ebcdic-compare-tool&metric=coverage)](https://sonarqube.com/dashboard/index/ebcdic-compare-tool) [![Lines of Code](https://sonarqube.com/api/badges/measure?key=ebcdic-compare-tool&metric=ncloc)](https://sonarqube.com/dashboard/index/ebcdic-compare-tool)  
 
 ## Installation
 1. Download the [current release](https://github.com/cmoresid/ebcdic-compare-tool/releases/download/v1.0.3/ebcdic-compare-v1.0.3.zip).  
