@@ -13,10 +13,10 @@ namespace CodeMovement.EbcdicCompare.Models
         /// </summary>
         public IEnumerable<EbcdicFileRecordModel> ExportedRecords { get; set; }
         /// <summary>
-        /// If set to true, then an EBCDIC that contains multiple record
-        /// types, then create a separate file for each record type.
+        /// If set to true, then the trailing whitespace on each field
+        /// value will be trimmed.
         /// </summary>
-        public bool SplitMultiRecordFile { get; set; }
+        public bool TrimTrailingWhiteSpace { get; set; }
 
         /// <summary>
         /// The directory to export the file(s) to.

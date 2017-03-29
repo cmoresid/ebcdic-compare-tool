@@ -12,6 +12,13 @@ namespace CodeMovement.EbcdicCompare.Services
 {
     public class CsvFileExportService : IFileExportService
     {
+        private readonly IFieldFormat _fieldFormatter;
+
+        public CsvFileExportService(IFieldFormat fieldFormatter)
+        {
+            _fieldFormatter = fieldFormatter;
+        }
+
         public OperationResult<bool> ExportRecordsToFile(FileExportRequest exportRequest)
         {
             var result = OperationResult<bool>.CreateResult(true);
@@ -21,14 +28,15 @@ namespace CodeMovement.EbcdicCompare.Services
                 throw new ArgumentException("CsvFileExportService expects a CsvExportRequest object.");
 
             var groupedRecords = exportRequest.ExportedRecords
-                .GroupBy(record => record.RecordTypeName,
+                .GroupBy(record => record.RawFileRow.RecordTypeName,
                          (key, g) => new { RecordType = key, Records = g.AsEnumerable() })
                 .ToList();
 
             try
             {
                 foreach (var recordGroup in groupedRecords)
-                    ExportRecordTypesToFile(exportRequest.OutputDirectory, recordGroup.RecordType, recordGroup.Records);
+                    ExportRecordTypesToFile(exportRequest.TrimTrailingWhiteSpace, 
+                        exportRequest.OutputDirectory, recordGroup.RecordType, recordGroup.Records);
             }
             catch (Exception ex)
             {
@@ -39,13 +47,14 @@ namespace CodeMovement.EbcdicCompare.Services
         }
 
         private void ExportRecordTypesToFile(
+            bool trimWhiteSpace,
             string outputDirectory, 
             string recordType, 
             IEnumerable<EbcdicFileRecordModel> records)
         {
-            var fileName = string.Format("{0}_{1}.csv", 
+            var fileName = MakeValidFileName(string.Format("{0}_{1}.csv", 
                 recordType.Replace(' ', '_'), 
-                DateTime.Now.ToString("yyyy_MM_dd"));
+                DateTime.Now.ToString("yyyy_MM_dd")));
 
             var filePath = Path.Combine(outputDirectory, fileName);
 
@@ -53,6 +62,8 @@ namespace CodeMovement.EbcdicCompare.Services
             {
                 using (var writer = new CsvWriter(textWriter))
                 {
+                    writer.Configuration.TrimFields = trimWhiteSpace;
+
                     var firstRecord = records.FirstOrDefault();
                     if (firstRecord == null)
                         return;
@@ -60,7 +71,7 @@ namespace CodeMovement.EbcdicCompare.Services
                     WriteHeader(writer, firstRecord);
 
                     foreach (var record in records)
-                        WriteRecordByProperty(writer, record, (field) => field.Value);
+                        WriteRecordByProperty(writer, record, (field) => _fieldFormatter.FormatField(field));
 
                     textWriter.Flush();
                 }
@@ -72,12 +83,20 @@ namespace CodeMovement.EbcdicCompare.Services
             WriteRecordByProperty(writer, firstRecord, (field) => field.Format.Name);
         }
 
-        private void WriteRecordByProperty(CsvWriter writer, EbcdicFileRecordModel record, Func<FieldValuePair, object> selector)
+        private void WriteRecordByProperty(CsvWriter writer, EbcdicFileRecordModel record, Func<FieldValuePair, string> selector)
         {
             foreach (var field in record.RawFileRow.FieldValues)
                 writer.WriteField(selector(field));
 
             writer.NextRecord();
+        }
+
+        private static string MakeValidFileName(string name)
+        {
+            string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(Path.GetInvalidFileNameChars()));
+            string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+
+            return System.Text.RegularExpressions.Regex.Replace(name, invalidRegStr, "_");
         }
     }
 }

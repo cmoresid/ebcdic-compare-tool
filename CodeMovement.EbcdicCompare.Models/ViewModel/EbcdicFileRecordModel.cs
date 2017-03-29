@@ -11,14 +11,16 @@ namespace CodeMovement.EbcdicCompare.Models.ViewModel
     public class EbcdicFileRecordModel
     {
         public readonly EbcdicFileRow RawFileRow;
+        private readonly IFieldFormat _fieldFormatter;
 
-        public EbcdicFileRecordModel(EbcdicFileRow fileRow)
+        public EbcdicFileRecordModel(IFieldFormat fieldFormatter, EbcdicFileRow fileRow)
         {
             if (fileRow == null)
                 throw new ArgumentNullException("EbcdicFileRow cannot be null.");
 
-            RawFileRow = fileRow;
+            _fieldFormatter = fieldFormatter;
 
+            RawFileRow = fileRow;
             ColumnHeading = string.Empty;
             RecordTypeName = fileRow.RecordTypeName;
             RowValue = Format();
@@ -42,18 +44,20 @@ namespace CodeMovement.EbcdicCompare.Models.ViewModel
         {
             var columnHeading = new StringBuilder();
 
-            columnHeading.Append(FormatColumn(RawFileRow.FieldValues[0].Format.Name, Format(RawFileRow.FieldValues[0])));
+            columnHeading.Append(FormatColumn(RawFileRow.FieldValues[0].Format.Name,
+                _fieldFormatter.FormatField(RawFileRow.FieldValues[0])));
 
-            for (int i = 1; i < RawFileRow.FieldValues.Count; i++)
+            foreach (var field in RawFileRow.FieldValues.Skip(1))
             {
                 columnHeading.Append(" ");
-                columnHeading.Append(FormatColumn(RawFileRow.FieldValues[i].Format.Name, Format(RawFileRow.FieldValues[i])));
+                columnHeading.Append(FormatColumn(field.Format.Name,
+                    _fieldFormatter.FormatField(field)));
             }
 
             ColumnHeading = columnHeading.ToString();
         }
 
-        public static ObservableCollection<EbcdicFileRecordModel> Map(List<EbcdicFileRow> ebcdicFileRows)
+        public static ObservableCollection<EbcdicFileRecordModel> Map(IFieldFormat formatter, List<EbcdicFileRow> ebcdicFileRows)
         {
             var ebcdicFileRowsViewModels = new ObservableCollection<EbcdicFileRecordModel>();
 
@@ -62,7 +66,7 @@ namespace CodeMovement.EbcdicCompare.Models.ViewModel
                 return ebcdicFileRowsViewModels;
             }
 
-            var firstEbcdicFileRow = new EbcdicFileRecordModel(ebcdicFileRows[0]);
+            var firstEbcdicFileRow = new EbcdicFileRecordModel(formatter, ebcdicFileRows[0]);
             var previousRecordTypeName = firstEbcdicFileRow.RecordTypeName;
             firstEbcdicFileRow.PopulateColumnHeading();
 
@@ -71,7 +75,7 @@ namespace CodeMovement.EbcdicCompare.Models.ViewModel
             var rowNumber = 2;
             foreach (var row in ebcdicFileRows.Skip(1))
             {
-                var mapped = new EbcdicFileRecordModel(row);
+                var mapped = new EbcdicFileRecordModel(formatter, row);
                 mapped.RowNumber = rowNumber++;
 
                 if (previousRecordTypeName != mapped.RecordTypeName)
@@ -106,57 +110,15 @@ namespace CodeMovement.EbcdicCompare.Models.ViewModel
         {
             var rowValue = new StringBuilder();
 
-            rowValue.Append(Format(RawFileRow.FieldValues[0]));
+            rowValue.Append(_fieldFormatter.FormatField(RawFileRow.FieldValues[0]));
 
             foreach (var field in RawFileRow.FieldValues.Skip(1))
             {
                 rowValue.Append(" ");
-                rowValue.Append(Format(field));
+                rowValue.Append(_fieldFormatter.FormatField(field));
             }
 
             return rowValue.ToString();
-        }
-
-        private string Format(FieldValuePair field)
-        {
-            var formatString = (field.Format.Type == "3" || field.Format.Type == "9") ?
-                FormatDecimal(field) : FormatString(field);
-
-            var formattedValue = string.Format(formatString, field.Value);
-            var maxLength = Math.Max(formattedValue.Length, field.Format.Name.Length);
-
-            return Regex.Escape(formattedValue.PadRight(maxLength))
-                .Replace(@"\ ", " ")
-                .Replace(@"\.", ".")
-                .Replace(@"\+", "+")
-                .Replace(@"\-", "-");
-        }
-
-        private static string FormatDecimal(FieldValuePair field)
-        {
-            const string formatString = "{0:pF;nF}";
-            var decimalFormat = new StringBuilder();
-
-            var precision = field.Format.Decimal;
-            var scale = int.Parse(field.Format.Size) - precision;
-
-            Enumerable.Repeat(0, scale).ToList().ForEach(x => decimalFormat.Append("0"));
-
-            if (precision > 0)
-            {
-                decimalFormat.Append(".");
-                Enumerable.Repeat(0, precision).ToList().ForEach(x => decimalFormat.Append("0"));
-            }
-
-            return formatString
-                     .Replace("p", field.Format.Signed ? "+" : "")
-                     .Replace("n", field.Format.Signed ? "-" : "")
-                     .Replace("F", decimalFormat.ToString());
-        }
-
-        private string FormatString(FieldValuePair field)
-        {
-            return "{0,-" + field.Format.Size + "}";
         }
 
         private string FormatColumn(string columnName, string fieldValue)

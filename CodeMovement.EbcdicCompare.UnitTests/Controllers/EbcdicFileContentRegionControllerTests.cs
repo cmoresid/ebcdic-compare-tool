@@ -12,6 +12,7 @@ using System.IO;
 using CodeMovement.EbcdicCompare.DataAccess;
 using CodeMovement.EbcdicCompare.Models.Result;
 using System.Collections.Generic;
+using CodeMovement.EbcdicCompare.Models;
 
 namespace CodeMovement.EbcdicCompare.UnitTests.Controllers
 {
@@ -20,7 +21,7 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Controllers
     {
         private ICompareEbcdicFilesService CompareEbcdicFilesService
         {
-            get { return new CompareEbcdicFilesService(new EbcdicReaderService(), new FileOperation()); }
+            get { return new CompareEbcdicFilesService(new EbcdicReaderService(), new FileOperation(), new DefaultFieldFormat()); }
         }
 
         private ICompareEbcdicFilesService CompareEbcdicFilesServiceMock

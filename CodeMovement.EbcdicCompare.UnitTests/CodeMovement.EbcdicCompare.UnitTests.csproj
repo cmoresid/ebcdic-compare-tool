@@ -178,6 +178,9 @@
     <None Include="TestData\Copybooks\Test.fileformat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="TestData\Output\.notempty">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="TestData\Dbs\Copybook_Delete_Association.db">

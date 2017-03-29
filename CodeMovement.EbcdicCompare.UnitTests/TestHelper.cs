@@ -1,4 +1,5 @@
 ﻿using CodeMovement.EbcdicCompare.DataAccess;
+using CodeMovement.EbcdicCompare.Models;
 using CodeMovement.EbcdicCompare.Presentation.Event;
 using CodeMovement.EbcdicCompare.Presentation.Interaction;
 using CodeMovement.EbcdicCompare.Services;
@@ -14,6 +15,7 @@ namespace CodeMovement.EbcdicCompare.UnitTests
         public const string TestData = @".\TestData";
         public const string Copybooks = TestData + @"\Copybooks";
         public const string EbcdicFiles = TestData + @"\EbcdicFiles";
+        public const string OutputDirectory = TestData + @"\Output";
 
         public static IEventAggregator CreateEventAggregator(FinishReadEbcdicFileEventMock finishReadEvent = null,
             ViewEbcdicFileRequestEventMock viewFileEvent = null,
@@ -89,7 +91,17 @@ namespace CodeMovement.EbcdicCompare.UnitTests
 
         public static ICompareEbcdicFilesService CompareEbcdicFilesService
         {
-            get { return new CompareEbcdicFilesService(new EbcdicReaderService(), new FileOperation()); }
+            get { return new CompareEbcdicFilesService(new EbcdicReaderService(), new FileOperation(), new DefaultFieldFormat()); }
+        }
+
+        public static IFileExportService CsvFileExportService
+        {
+            get { return new CsvFileExportService(DefaultFieldFormatter); }
+        }
+
+        public static IFieldFormat DefaultFieldFormatter
+        {
+            get { return new DefaultFieldFormat(); }
         }
     }
 }

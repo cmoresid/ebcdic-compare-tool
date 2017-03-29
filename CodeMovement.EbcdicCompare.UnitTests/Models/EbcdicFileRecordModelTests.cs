@@ -5,6 +5,7 @@ using CodeMovement.EbcdicCompare.Models;
 using CodeMovement.EbcdicCompare.Models.Copybook;
 using CodeMovement.EbcdicCompare.Models.Ebcdic;
 using CodeMovement.EbcdicCompare.Models.ViewModel;
+using CodeMovement.EbcdicCompare.UnitTests;
 
 namespace CodeMovement.EbcdicCompare.Tests.Models
 {
@@ -59,7 +60,7 @@ namespace CodeMovement.EbcdicCompare.Tests.Models
                 new FieldValuePair(FieldFormats[fieldFormat], value)
             };
 
-            return new EbcdicFileRecordModel(CreateRow(recordName, fieldValuePairs));
+            return new EbcdicFileRecordModel(TestHelper.DefaultFieldFormatter, CreateRow(recordName, fieldValuePairs));
         }
 
         #endregion
@@ -68,13 +69,13 @@ namespace CodeMovement.EbcdicCompare.Tests.Models
         [ExpectedException(typeof(ArgumentNullException))]
         public void EbcdicFileRecordModel_Constructor_Null_Test()
         {
-            var ebcdicFileRecordModel = new EbcdicFileRecordModel(null);
+            var ebcdicFileRecordModel = new EbcdicFileRecordModel(TestHelper.DefaultFieldFormatter, null);
         }
 
         [TestMethod]
         public void EbcdicFileRecordModel_Constructor_Valid_Value_Test()
         {
-            var viewModel = new EbcdicFileRecordModel(CreateRow("RECORD", "9_+0000.00", 10.53m));
+            var viewModel = new EbcdicFileRecordModel(TestHelper.DefaultFieldFormatter, CreateRow("RECORD", "9_+0000.00", 10.53m));
             
             Assert.AreEqual(string.Empty, viewModel.ColumnHeading);
             Assert.AreEqual(RecordFlag.None, viewModel.Flag);
@@ -198,7 +199,7 @@ namespace CodeMovement.EbcdicCompare.Tests.Models
                 }
             };
 
-            var viewModel = new EbcdicFileRecordModel(fileRow);
+            var viewModel = new EbcdicFileRecordModel(TestHelper.DefaultFieldFormatter, fileRow);
 
             Assert.AreEqual("ab    0412.20  ", viewModel.RowValue);
         }
@@ -225,7 +226,7 @@ namespace CodeMovement.EbcdicCompare.Tests.Models
                 }
             };
 
-            var viewModel = new EbcdicFileRecordModel(fileRow);
+            var viewModel = new EbcdicFileRecordModel(TestHelper.DefaultFieldFormatter, fileRow);
             viewModel.PopulateColumnHeading();
 
             Assert.AreEqual("X_aaa 3_0000.00", viewModel.ColumnHeading);
@@ -240,7 +241,7 @@ namespace CodeMovement.EbcdicCompare.Tests.Models
                 CreateRow("RECORD_A", "3_0000.00", 100.21)
             };
 
-            var viewModels = EbcdicFileRecordModel.Map(ebcdicFileRows);
+            var viewModels = EbcdicFileRecordModel.Map(TestHelper.DefaultFieldFormatter, ebcdicFileRows);
 
             Assert.IsNotNull(viewModels);
             Assert.AreEqual(viewModels.Count, 2);
@@ -259,7 +260,7 @@ namespace CodeMovement.EbcdicCompare.Tests.Models
                 CreateRow("RECORD_B", "X_aaa", "abcdef")
             };
 
-            var viewModels = EbcdicFileRecordModel.Map(ebcdicFileRows);
+            var viewModels = EbcdicFileRecordModel.Map(TestHelper.DefaultFieldFormatter, ebcdicFileRows);
 
             Assert.IsNotNull(viewModels);
             Assert.AreEqual(viewModels.Count, 3);

@@ -36,15 +36,33 @@ namespace CodeMovement.EbcdicCompare.UnitTests.Services
 
 
         [TestMethod]
-        public void TestMethod1()
+        public void CsvFileExportService_Export_Simple_File()
         {
             var fileName = "simple.txt";
             var copybookName = "simple.fileformat";
 
             var records = ParseEbcdicFile(fileName, copybookName);
 
-            var csvWriter = new CsvFileExportService();
-            var result = csvWriter.ExportRecordsToFile(new CsvExportRequest(records, @"C:\Users\cmoreside\Desktop"));
+            var csvWriter = TestHelper.CsvFileExportService;
+            var result = csvWriter.ExportRecordsToFile(new CsvExportRequest(records, TestHelper.OutputDirectory)
+            {
+                TrimTrailingWhiteSpace = true
+            });
+        }
+
+        [TestMethod]
+        public void CsvFileExportService_Export_Multi_Record_Type_File()
+        {
+            var fileName = "MultipleRecords.txt";
+            var copybookName = "MultipleRecords.fileformat";
+
+            var records = ParseEbcdicFile(fileName, copybookName);
+
+            var csvWriter = TestHelper.CsvFileExportService;
+            var result = csvWriter.ExportRecordsToFile(new CsvExportRequest(records, TestHelper.OutputDirectory)
+            {
+                TrimTrailingWhiteSpace = true
+            });
         }
     }
 }

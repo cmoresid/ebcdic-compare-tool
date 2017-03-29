@@ -16,11 +16,13 @@ namespace CodeMovement.EbcdicCompare.Services
     {
         private readonly IEbcdicReaderService _ebcdicReaderService;
         private readonly IFileOperation _fileOperation;
+        private readonly IFieldFormat _fieldFormatter;
 
-        public CompareEbcdicFilesService(IEbcdicReaderService ebcdicReaderService, IFileOperation fileOperation)
+        public CompareEbcdicFilesService(IEbcdicReaderService ebcdicReaderService, IFileOperation fileOperation, IFieldFormat fieldFormatter)
         {
             _ebcdicReaderService = ebcdicReaderService;
             _fileOperation = fileOperation;
+            _fieldFormatter = fieldFormatter;
         }
 
         public OperationResult<CompareEbcdicFileResult> Compare(CompareEbcdicFilesRequest request)
@@ -203,7 +205,7 @@ namespace CodeMovement.EbcdicCompare.Services
                 var ebcdicFileRows = _ebcdicReaderService.ReadEbcdicFile(ebcdicFilePath,
                     copybookFilePath);
 
-                result.Result = EbcdicFileRecordModel.Map(ebcdicFileRows);
+                result.Result = EbcdicFileRecordModel.Map(_fieldFormatter, ebcdicFileRows);
             }
             catch (InvalidOperationException ex)
             {

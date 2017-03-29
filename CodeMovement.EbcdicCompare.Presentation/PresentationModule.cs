@@ -10,6 +10,7 @@ using CodeMovement.EbcdicCompare.Presentation.Interaction;
 using CodeMovement.EbcdicCompare.Presentation.View;
 using System.Diagnostics.CodeAnalysis;
 using CodeMovement.EbcdicCompare.Presentation.ViewModel;
+using CodeMovement.EbcdicCompare.Models;
 
 namespace CodeMovement.EbcdicCompare.Presentation
 {
@@ -37,6 +38,7 @@ namespace CodeMovement.EbcdicCompare.Presentation
             _unityContainer.RegisterType<IFileOperationsManager, FileOperationsManager>();
             _unityContainer.RegisterType<ICopybookManager, CopybookManager>();
             _unityContainer.RegisterType<IFileOperation, FileOperation>();
+            _unityContainer.RegisterType<IFieldFormat, DefaultFieldFormat>(new ContainerControlledLifetimeManager());
 
             _unityContainer.RegisterType<HomeView>();
             _unityContainer.RegisterTypeForNavigation<HomeView>();

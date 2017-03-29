@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using System.IO;
 using CodeMovement.EbcdicCompare.Models.Request;
 using CodeMovement.EbcdicCompare.Models;
+using CodeMovement.EbcdicCompare.UnitTests;
 
 namespace CodeMovement.EbcdicCompare.Tests.Services
 {
@@ -19,7 +20,7 @@ namespace CodeMovement.EbcdicCompare.Tests.Services
         {
             get
             {
-                return new CompareEbcdicFilesService(new EbcdicReaderService(), new FileOperation());
+                return TestHelper.CompareEbcdicFilesService;
             }
         }
 
@@ -68,7 +69,8 @@ namespace CodeMovement.EbcdicCompare.Tests.Services
             var fileOperation = MockRepository.GenerateStub<IFileOperation>();
             fileOperation.Stub(m => m.GetFileSize(file1)).Throw(new FileNotFoundException());
 
-            var compareEbcdicFilesService = new CompareEbcdicFilesService(new EbcdicReaderService(), fileOperation);
+            var compareEbcdicFilesService = new CompareEbcdicFilesService(
+                new EbcdicReaderService(), fileOperation, TestHelper.DefaultFieldFormatter);
 
             var result = compareEbcdicFilesService.CompareEbcdicByteContents(file1, file2);
 
