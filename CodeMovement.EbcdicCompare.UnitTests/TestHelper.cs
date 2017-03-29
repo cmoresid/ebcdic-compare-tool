@@ -86,5 +86,10 @@ namespace CodeMovement.EbcdicCompare.UnitTests
         {
             get { return MockRepository.GenerateMock<ICopybookRepository>(); }
         }
+
+        public static ICompareEbcdicFilesService CompareEbcdicFilesService
+        {
+            get { return new CompareEbcdicFilesService(new EbcdicReaderService(), new FileOperation()); }
+        }
     }
 }

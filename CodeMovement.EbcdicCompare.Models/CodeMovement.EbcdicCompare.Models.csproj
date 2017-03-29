@@ -73,6 +73,7 @@
     <Compile Include="Copybook\IFieldsList.cs" />
     <Compile Include="Copybook\RecordFormat.cs" />
     <Compile Include="Copybook\RecordFormatMap.cs" />
+    <Compile Include="CsvExportRequest.cs" />
     <Compile Include="Ebcdic\EbcdicFileRow.cs" />
     <Compile Include="Ebcdic\FieldValuePair.cs" />
     <Compile Include="Exception\EbcdicException.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Exception\EndOfFileException.cs" />
     <Compile Include="Exception\FieldParsingException.cs" />
     <Compile Include="Exception\UnexpectedFieldTypeException.cs" />
+    <Compile Include="FileExportRequest.cs" />
     <Compile Include="IO\AbstractResource.cs" />
     <Compile Include="IO\FileSystemResource.cs" />
     <Compile Include="IO\IResource.cs" />

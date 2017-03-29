@@ -10,14 +10,14 @@ namespace CodeMovement.EbcdicCompare.Models.ViewModel
 {
     public class EbcdicFileRecordModel
     {
-        private readonly EbcdicFileRow _ebcdicFileRow;
+        public readonly EbcdicFileRow RawFileRow;
 
         public EbcdicFileRecordModel(EbcdicFileRow fileRow)
         {
             if (fileRow == null)
                 throw new ArgumentNullException("EbcdicFileRow cannot be null.");
 
-            _ebcdicFileRow = fileRow;
+            RawFileRow = fileRow;
 
             ColumnHeading = string.Empty;
             RecordTypeName = fileRow.RecordTypeName;
@@ -42,12 +42,12 @@ namespace CodeMovement.EbcdicCompare.Models.ViewModel
         {
             var columnHeading = new StringBuilder();
 
-            columnHeading.Append(FormatColumn(_ebcdicFileRow.FieldValues[0].Format.Name, Format(_ebcdicFileRow.FieldValues[0])));
+            columnHeading.Append(FormatColumn(RawFileRow.FieldValues[0].Format.Name, Format(RawFileRow.FieldValues[0])));
 
-            for (int i = 1; i < _ebcdicFileRow.FieldValues.Count; i++)
+            for (int i = 1; i < RawFileRow.FieldValues.Count; i++)
             {
                 columnHeading.Append(" ");
-                columnHeading.Append(FormatColumn(_ebcdicFileRow.FieldValues[i].Format.Name, Format(_ebcdicFileRow.FieldValues[i])));
+                columnHeading.Append(FormatColumn(RawFileRow.FieldValues[i].Format.Name, Format(RawFileRow.FieldValues[i])));
             }
 
             ColumnHeading = columnHeading.ToString();
@@ -106,9 +106,9 @@ namespace CodeMovement.EbcdicCompare.Models.ViewModel
         {
             var rowValue = new StringBuilder();
 
-            rowValue.Append(Format(_ebcdicFileRow.FieldValues[0]));
+            rowValue.Append(Format(RawFileRow.FieldValues[0]));
 
-            foreach (var field in _ebcdicFileRow.FieldValues.Skip(1))
+            foreach (var field in RawFileRow.FieldValues.Skip(1))
             {
                 rowValue.Append(" ");
                 rowValue.Append(Format(field));
